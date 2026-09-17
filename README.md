@@ -68,15 +68,15 @@ smart-trip-planner/
 │       ├── auth.js                  # Module Xác thực (Đăng nhập, Đăng ký qua OTP email)
 │       ├── profile.js               # Module Hồ sơ (Cập nhật Profile, Thống kê, Quản lý Yêu thích) - trang Private
 │       └── admin.js                 # Module Trang Quản Trị (Thống kê, CRUD điểm đến, Khóa user, Xóa review)
-├── index.html                       # Trang chủ (Khang)
-├── destinations.html                # Trang Khám phá (Khiêm)
-├── destination-detail.html          # Trang Chi tiết địa điểm (Vương)
-├── planner.html                     # Trang Smart Planner (Nguyên)
-├── itinerary.html                   # Trang Lịch trình của tôi - Private (Huy)
-├── login.html                       # Trang Đăng nhập (Huy, Khang)
-├── register.html                    # Trang Đăng ký (Huy, Khang)
-├── profile.html                     # Trang Hồ sơ cá nhân - Private (Vương, Khiêm)
-├── admin.html                       # Trang Quản Trị hệ thống - chỉ dành cho role Admin (Khang)
+├── index.html                       # Trang chủ 
+├── destinations.html                # Trang Khám phá 
+├── destination-detail.html          # Trang Chi tiết địa điểm 
+├── planner.html                     # Trang Smart Planner 
+├── itinerary.html                   # Trang Lịch trình của tôi - Private 
+├── login.html                       # Trang Đăng nhập 
+├── register.html                    # Trang Đăng ký 
+├── profile.html                     # Trang Hồ sơ cá nhân - Private 
+├── admin.html                       # Trang Quản Trị hệ thống - chỉ dành cho role Admin 
 └── README.md                        # Tài liệu kỹ thuật đồ án
 ```
 
@@ -100,7 +100,7 @@ smart-trip-planner/
 4. **Đầy đủ tính năng thực tế:** Sổ quản lý chi tiêu (Expense Tracker) + Checklist hành lý có thanh tiến độ `%` + Hệ thống Đánh giá Review + Gợi ý lịch trình bằng AI (Google Gemini).
 5. **Phân quyền & Bảo mật:** Phân quyền Public/Private theo trang (khách xem tự do, phải đăng nhập mới vào được "Lịch trình của tôi") và phân quyền theo vai trò Admin/User qua PHP Session (không phải chỉ ẩn nút ở giao diện). Chống XSS khi hiển thị nội dung người dùng nhập, chống thao túng dữ liệu người khác (kiểm tra quyền sở hữu ở mọi API sửa/xóa).
 
-## 5.
+## 5. Dữ liệu
 ** Thông tin gửi mail OTP qua Gmail SMTP **
 Hướng dẫn lấy App Password: https://myaccount.google.com/apppasswords
 define('SMTP_EMAIL', 'your_email@gmail.com');

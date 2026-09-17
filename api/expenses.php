@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/expenses.php
- * NGƯỜI PHỤ TRÁCH: Huy
- * ==============================================================================
  * API Sổ Chi Tiêu Thực Tế (Expense Tracker):
  * 1. Lấy danh sách các khoản chi tiêu.
  * 2. Thêm khoản chi tiêu mới.

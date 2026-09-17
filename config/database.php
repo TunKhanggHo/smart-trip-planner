@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: config/database.php
- * NGƯỜI PHỤ TRÁCH: Khang & Nhóm Backend
- * ==============================================================================
  * Kết nối Cơ sở dữ liệu MySQL bằng PDO (PHP Data Objects)
  * Hỗ trợ chống SQL Injection và bảo mật cao
  */

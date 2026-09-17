@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/checklists.php
- * NGƯỜI PHỤ TRÁCH: Huy
- * ==============================================================================
  * API Checklist Hành Lý Chuẩn Bị:
  * 1. Lấy danh sách đồ dùng theo nhóm.
  * 2. Đánh dấu đã chuẩn bị / chưa (Toggle check).

@@ -1,13 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/admin.js
- * ==============================================================================
- * Trang Quản Trị (admin.html) - CHỈ DÀNH CHO TÀI KHOẢN CÓ role = admin.
- * Lưu ý bảo mật: mọi hành động ở đây đều được backend kiểm tra lại bằng
- * requireAdmin() (api/*.php) — giao diện chỉ ẩn nút cho gọn, không phải lớp
- * bảo mật thật. Không được bỏ qua kiểm tra ở backend dù đã gate ở đây.
- */
 
 let currentAdminId = null; // ID của chính admin đang đăng nhập (để tự chặn tự khóa mình)
 

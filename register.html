@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
-<!-- ==============================================================================
-     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
-     FILE: register.html
-     NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng ký thành viên mới & Xác thực OTP)
-     ============================================================================== -->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +35,7 @@
     <div class="auth-card animate-fade-in-up" id="registerCard">
       <div class="auth-header">
         <h1 class="auth-title">Tạo Tài Khoản Mới ✨</h1>
-        <p class="auth-subtitle">Xác thực email qua mã OTP để bảo mật tài khoản & chống bot</p>
+        <p class="auth-subtitle">Xác thực email qua mã OTP để bảo mật tài khoản</p>
       </div>
 
       <!-- BƯỚC 1: ĐIỀN THÔNG TIN ĐĂNG KÝ -->
@@ -87,11 +83,11 @@
       <div id="regStep2" style="display: none;">
         <div class="otp-notice-box">
           <p style="margin: 0; font-size: 0.95rem; color: #065f46; font-weight: 600;">
-            📩 Hệ thống đã gửi mã OTP (6 chữ số) đến hộp thư Gmail: <br>
+            📩 Hệ thống đã gửi mã OTP đến hộp thư: <br>
             <strong id="displayRegTargetEmail" style="font-size: 1.05rem; color: #047857;"></strong>
           </p>
           <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #047857; background: #e6f4ea; padding: 0.6rem 0.85rem; border-radius: 8px; line-height: 1.5;">
-            👉 <strong>Vui lòng mở ứng dụng Gmail (hoặc mail.google.com)</strong> của bạn, kiểm tra hộp thư đến (hoặc mục Spam/Thư rác) để lấy mã OTP nhập vào bên dưới.
+            👉 <strong>Vui lòng mở ứng dụng Gmail</strong> của bạn, kiểm tra hộp thư đến để lấy mã OTP nhập vào bên dưới.
           </div>
         </div>
 
@@ -102,7 +98,7 @@
 
         <form id="verifyRegisterForm" onsubmit="handleVerifyRegister(event)">
           <div class="form-group">
-            <label class="form-label" for="regOtp">Nhập mã OTP từ Gmail (6 chữ số)</label>
+            <label class="form-label" for="regOtp">Nhập mã OTP (6 chữ số)</label>
             <input type="text" id="regOtp" class="form-control" placeholder="______" maxlength="6" pattern="[0-9]{6}" required style="letter-spacing: 8px; font-weight: bold; font-size: 1.35rem; text-align: center;">
           </div>
 

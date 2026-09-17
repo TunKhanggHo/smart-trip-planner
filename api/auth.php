@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/auth.php
- * NGƯỜI PHỤ TRÁCH: Huy, Khang
- * ==============================================================================
  * API xử lý Xác thực:
  * 1. Đăng ký tài khoản mới (Mã hóa mật khẩu bằng BCRYPT).
  * 2. Đăng nhập hệ thống & cấp PHP Session.

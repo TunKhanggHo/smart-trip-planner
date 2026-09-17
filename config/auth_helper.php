@@ -1,9 +1,6 @@
 <?php
 /**
  * ==============================================================================
- * FILE: config/auth_helper.php
- * Các hàm dùng chung để kiểm tra quyền hạn ở phía Backend.
- *
  * QUAN TRỌNG: Đây là lớp bảo mật THẬT SỰ, không phải chỉ ẩn nút ở giao diện.
  * Bất kỳ file api/*.php nào có hành động chỉ dành riêng cho Admin
  * (xóa điểm đến, khóa tài khoản, xóa review người khác...) đều phải

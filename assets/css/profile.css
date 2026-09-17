@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/profile.css
- * NGƯỜI PHỤ TRÁCH: Vương, Khiêm (STT 7 - Hồ sơ cá nhân & Quản lý dữ liệu)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Hồ Sơ Cá Nhân (profile.html):
- * Profile layout, Avatar lớn, Stats badge grid, Edit profile form.
- */
 
 .profile-layout {
   display: grid;

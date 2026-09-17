@@ -1,9 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/admin_users.php
- * ==============================================================================
  * API Quản lý người dùng cho Trang Quản Trị (chỉ Admin được dùng):
  * 1. Lấy danh sách toàn bộ user.
  * 2. Khóa (ban) / Mở khóa (unban) tài khoản vi phạm.

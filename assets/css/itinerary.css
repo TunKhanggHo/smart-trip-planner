@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/itinerary.css
- * NGƯỜI PHỤ TRÁCH: Huy (STT 5 - Lịch trình của tôi, Chi tiêu & Checklist)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Lịch Trình (itinerary.html):
- * Tab navigation, Trip cards, Sổ chi tiêu Expense Table, Checklist hành lý.
- */
 
 .tab-nav-bar {
   display: flex;

@@ -1,13 +1,4 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/planner.js
- * NGƯỜI PHỤ TRÁCH: Nguyên, Khang (STT 4 - Smart Planner & AI)
- * ==============================================================================
- * Sinh lịch trình 100% bằng Google Gemini AI (api/ai_planner.php).
- * Không còn thuật toán JS dự phòng — nếu AI lỗi, hệ thống báo lỗi rõ ràng
- * để người dùng thử lại, thay vì tạo ra kết quả giả không phải do AI.
- */
+
 document.addEventListener('DOMContentLoaded', async () => {
   let currentGeneratedTrip = null;
   const form = document.getElementById('smartPlannerForm');

@@ -1,12 +1,4 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/auth.css
- * NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng nhập & Đăng ký)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Đăng Nhập & Đăng Ký (login.html & register.html):
- * Auth cards, Password show/hide toggle, Demo 1-Click login box.
- */
+
 
 .auth-page-wrapper {
   min-height: calc(100vh - var(--header-height) - 100px);

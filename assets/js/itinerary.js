@@ -1,14 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/itinerary.js
- * NGƯỜI PHỤ TRÁCH: Huy (STT 5 - Lịch trình của tôi, Sổ Chi tiêu & Checklist)
- * ==============================================================================
- * Kết nối PHP API & MySQL:
- * - Tải và quản lý danh sách chuyến đi từ bảng `trips` & `trip_schedules`.
- * - Sổ quản lý chi tiêu thực tế (Expense Tracker) lưu bảng `trip_expenses`.
- * - Checklist hành lý lưu bảng `trip_checklists`.
- */
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Trang PRIVATE: bắt buộc đăng nhập mới được xem "Lịch trình của tôi"

@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/trips.php
- * NGƯỜI PHỤ TRÁCH: Nguyên, Huy
- * ==============================================================================
  * API xử lý:
  * 1. Lưu chuyến đi mới do Smart Planner sinh ra (lưu vào bảng trips & trip_schedules).
  * 2. Lấy danh sách chuyến đi của người dùng.

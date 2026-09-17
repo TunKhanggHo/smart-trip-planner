@@ -1,12 +1,4 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/destination-detail.css
- * NGƯỜI PHỤ TRÁCH: Vương (STT 3 - Chi tiết địa điểm)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Chi Tiết Điểm Đến (destination-detail.html):
- * Hero banner, Gallery thumbnails, Weather card, Tips, Timeline, Reviews.
- */
+
 
 .detail-hero {
   position: relative;

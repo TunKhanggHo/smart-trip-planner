@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/reviews.php
- * NGƯỜI PHỤ TRÁCH: Vương
- * ==============================================================================
  * API Quản Lý Đánh Giá Reviews:
  * 1. Lấy danh sách đánh giá theo ID điểm đến.
  * 2. Thêm đánh giá mới kèm chấm điểm sao.

@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/destinations.php
- * NGƯỜI PHỤ TRÁCH: Khiêm, Vương
- * ==============================================================================
  * API xử lý:
  * 1. Lấy danh sách điểm đến du lịch (kèm tìm kiếm, lọc thể loại, ngân sách, sắp xếp).
  * 2. Lấy chi tiết điểm đến theo ID (kèm hoạt động, thời tiết, mẹo, đánh giá).

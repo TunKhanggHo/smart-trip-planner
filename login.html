@@ -1,159 +1,321 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<!-- ==============================================================================
-     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
-     FILE: login.html
-     NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng nhập & Xác thực hệ thống)
-     ============================================================================== -->
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Đăng nhập tài khoản Smart Trip Planner để quản lý các chuyến đi của bạn.">
-  <title>Đăng Nhập - Smart Trip Planner</title>
-  
-  <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="assets/css/style.css?v=2.2">
-  <link rel="stylesheet" href="assets/css/animation.css?v=2.2">
-  <link rel="stylesheet" href="assets/css/responsive.css?v=2.2">
-  <link rel="stylesheet" href="assets/css/auth.css?v=2.2">
-</head>
-<body>
 
-  <!-- Header (Khang) -->
-  <header class="site-header">
-    <div class="container">
-      <nav class="navbar">
-        <a href="index.html" class="brand-logo">
-          <div class="logo-icon">✈️</div>
-          <span>Trip<span>Planner</span></span>
-        </a>
-        <div class="nav-actions">
-          <a href="register.html" class="btn btn-primary btn-sm">Đăng ký tài khoản</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Đăng nhập tài khoản Smart Trip Planner để quản lý các chuyến đi của bạn."
+    />
+    <title>Đăng Nhập - Smart Trip Planner</title>
 
-  <!-- Auth Content (Huy & Khang) -->
-  <main class="auth-page-wrapper">
-    <div class="auth-card animate-fade-in-up" id="loginCard">
-      <div class="auth-header">
-        <h1 class="auth-title">Chào Mừng Trở Lại 👋</h1>
-        <p class="auth-subtitle">Đăng nhập để xem và quản lý lịch trình đi trốn của bạn</p>
-      </div>
-
-      <!-- Khung thông báo lỗi trực tiếp bên trong form -->
-      <div id="loginAlert" class="auth-alert error" style="display: none;">
-        <span class="auth-alert-icon">⚠️</span>
-        <span id="loginAlertText" class="auth-alert-text">Email hoặc mật khẩu không chính xác!</span>
-      </div>
-
-      <form id="loginForm" onsubmit="handleLoginSubmit(event)">
-        <div class="form-group">
-          <label class="form-label" for="loginEmail">Email đăng nhập</label>
-          <input type="email" id="loginEmail" class="form-control" placeholder="khang@gmail.com" required autocomplete="email">
-        </div>
-
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <label class="form-label" for="loginPassword">Mật khẩu</label>
-            <a href="javascript:void(0)" onclick="openForgotPasswordModal()" style="font-size: 0.85rem; color: var(--primary); font-weight: 600; text-decoration: none;">Quên mật khẩu?</a>
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css?v=2.2" />
+    <link rel="stylesheet" href="assets/css/animation.css?v=2.2" />
+    <link rel="stylesheet" href="assets/css/responsive.css?v=2.2" />
+    <link rel="stylesheet" href="assets/css/auth.css?v=2.2" />
+  </head>
+  <body>
+    <!-- Header (Khang) -->
+    <header class="site-header">
+      <div class="container">
+        <nav class="navbar">
+          <a href="index.html" class="brand-logo">
+            <div class="logo-icon">✈️</div>
+            <span>Trip<span>Planner</span></span>
+          </a>
+          <div class="nav-actions">
+            <a href="register.html" class="btn btn-primary btn-sm"
+              >Đăng ký tài khoản</a
+            >
           </div>
-          <div class="password-input-group">
-            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
-            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;" id="btnLoginSubmit">
-          Đăng Nhập Ngay ➔
-        </button>
-      </form>
-
-      <div class="auth-footer-text">
-        Chưa có tài khoản? <a href="register.html">Đăng ký thành viên mới</a>
+        </nav>
       </div>
-    </div>
-  </main>
+    </header>
 
-  <!-- Modal Quên Mật Khẩu -->
-  <div id="forgotPasswordModal" class="auth-modal-overlay" style="display: none;">
-    <div class="auth-modal-dialog">
-      <div class="auth-modal-header">
-        <h3>🔒 Khôi Phục Mật Khẩu</h3>
-        <button type="button" class="auth-modal-close" onclick="closeForgotPasswordModal()">&times;</button>
-      </div>
-      <div class="auth-modal-body">
-        <!-- Bước 1: Nhập Email -->
-        <div id="forgotStep1">
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
-            Nhập địa chỉ email đăng ký tài khoản của bạn. Hệ thống sẽ gửi mã xác nhận OTP gồm 6 chữ số để bạn đặt lại mật khẩu mới.
+    <!-- Auth Content (Huy & Khang) -->
+    <main class="auth-page-wrapper">
+      <div class="auth-card animate-fade-in-up" id="loginCard">
+        <div class="auth-header">
+          <h1 class="auth-title">Chào Mừng Trở Lại 👋</h1>
+          <p class="auth-subtitle">
+            Đăng nhập để xem và quản lý lịch trình đi trốn của bạn
           </p>
-          <div id="forgotAlertStep1" class="auth-alert error" style="display: none;">
-            <span class="auth-alert-icon">⚠️</span>
-            <span class="auth-alert-text" id="forgotAlertStep1Text"></span>
-          </div>
-          <form id="forgotFormStep1" onsubmit="handleSendOtp(event)">
-            <div class="form-group">
-              <label class="form-label" for="forgotEmail">Email đã đăng ký</label>
-              <input type="email" id="forgotEmail" class="form-control" placeholder="khang@gmail.com" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;" id="btnSendOtp">
-              Gửi Mã Xác Nhận OTP ➔
-            </button>
-          </form>
         </div>
 
-        <!-- Bước 2: Nhập OTP & Đặt mật khẩu mới -->
-        <div id="forgotStep2" style="display: none;">
-          <div class="otp-notice-box">
-            <p style="margin: 0; font-size: 0.95rem; color: #065f46; font-weight: 600;">
-              📩 Mã OTP khôi phục đã gửi đến Gmail: <br>
-              <strong id="displayTargetEmail" style="font-size: 1.05rem; color: #047857;"></strong>
+        <!-- Khung thông báo lỗi trực tiếp bên trong form -->
+        <div id="loginAlert" class="auth-alert error" style="display: none">
+          <span class="auth-alert-icon">⚠️</span>
+          <span id="loginAlertText" class="auth-alert-text"
+            >Email hoặc mật khẩu không chính xác!</span
+          >
+        </div>
+
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email đăng nhập</label>
+            <input
+              type="email"
+              id="loginEmail"
+              class="form-control"
+              placeholder="khang@gmail.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <label class="form-label" for="loginPassword">Mật khẩu</label>
+              <a
+                href="javascript:void(0)"
+                onclick="openForgotPasswordModal()"
+                style="
+                  font-size: 0.85rem;
+                  color: var(--primary);
+                  font-weight: 600;
+                  text-decoration: none;
+                "
+                >Quên mật khẩu?</a
+              >
+            </div>
+            <div class="password-input-group">
+              <input
+                type="password"
+                id="loginPassword"
+                class="form-control"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="password-toggle-btn"
+                onclick="togglePasswordVisibility('loginPassword', this)"
+              >
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg"
+            style="width: 100%; margin-top: 1rem"
+            id="btnLoginSubmit"
+          >
+            Đăng Nhập Ngay ➔
+          </button>
+        </form>
+
+        <div class="auth-footer-text">
+          Chưa có tài khoản? <a href="register.html">Đăng ký thành viên mới</a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Quên Mật Khẩu -->
+    <div
+      id="forgotPasswordModal"
+      class="auth-modal-overlay"
+      style="display: none"
+    >
+      <div class="auth-modal-dialog">
+        <div class="auth-modal-header">
+          <h3>🔒 Khôi Phục Mật Khẩu</h3>
+          <button
+            type="button"
+            class="auth-modal-close"
+            onclick="closeForgotPasswordModal()"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="auth-modal-body">
+          <!-- Bước 1: Nhập Email -->
+          <div id="forgotStep1">
+            <p
+              style="
+                color: var(--text-muted);
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+              "
+            >
+              Nhập địa chỉ email đăng ký tài khoản của bạn. Hệ thống sẽ gửi mã
+              xác nhận OTP gồm 6 chữ số để bạn đặt lại mật khẩu mới.
             </p>
-            <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #047857; background: #e6f4ea; padding: 0.5rem 0.75rem; border-radius: 8px;">
-              👉 Vui lòng mở hộp thư Gmail của bạn để lấy mã OTP 6 số.
+            <div
+              id="forgotAlertStep1"
+              class="auth-alert error"
+              style="display: none"
+            >
+              <span class="auth-alert-icon">⚠️</span>
+              <span class="auth-alert-text" id="forgotAlertStep1Text"></span>
             </div>
+            <form id="forgotFormStep1" onsubmit="handleSendOtp(event)">
+              <div class="form-group">
+                <label class="form-label" for="forgotEmail"
+                  >Email đã đăng ký</label
+                >
+                <input
+                  type="email"
+                  id="forgotEmail"
+                  class="form-control"
+                  placeholder="khang@gmail.com"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                style="width: 100%; margin-top: 0.5rem"
+                id="btnSendOtp"
+              >
+                Gửi Mã Xác Nhận OTP ➔
+              </button>
+            </form>
           </div>
-          <div id="forgotAlertStep2" class="auth-alert error" style="display: none;">
-            <span class="auth-alert-icon">⚠️</span>
-            <span id="forgotAlertStep2Text" class="auth-alert-text"></span>
-          </div>
-          <form id="forgotFormStep2" onsubmit="handleResetPassword(event)">
-            <div class="form-group">
-              <label class="form-label" for="forgotOtp">Nhập mã OTP từ Gmail (6 chữ số)</label>
-              <input type="text" id="forgotOtp" class="form-control" placeholder="______" maxlength="6" pattern="[0-9]{6}" required style="letter-spacing: 6px; font-weight: bold; font-size: 1.25rem; text-align: center;">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="forgotNewPassword">Mật khẩu mới</label>
-              <div class="password-input-group">
-                <input type="password" id="forgotNewPassword" class="form-control" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
-                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('forgotNewPassword', this)">👁️</button>
+
+          <!-- Bước 2: Nhập OTP & Đặt mật khẩu mới -->
+          <div id="forgotStep2" style="display: none">
+            <div class="otp-notice-box">
+              <p
+                style="
+                  margin: 0;
+                  font-size: 0.95rem;
+                  color: #065f46;
+                  font-weight: 600;
+                "
+              >
+                📩 Mã OTP khôi phục đã gửi đến Gmail: <br />
+                <strong
+                  id="displayTargetEmail"
+                  style="font-size: 1.05rem; color: #047857"
+                ></strong>
+              </p>
+              <div
+                style="
+                  margin-top: 0.75rem;
+                  font-size: 0.85rem;
+                  color: #047857;
+                  background: #e6f4ea;
+                  padding: 0.5rem 0.75rem;
+                  border-radius: 8px;
+                "
+              >
+                👉 Vui lòng mở hộp thư Gmail của bạn để lấy mã OTP 6 số.
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="forgotConfirmPassword">Xác nhận mật khẩu mới</label>
-              <div class="password-input-group">
-                <input type="password" id="forgotConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu mới" minlength="6" required>
-                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('forgotConfirmPassword', this)">👁️</button>
+            <div
+              id="forgotAlertStep2"
+              class="auth-alert error"
+              style="display: none"
+            >
+              <span class="auth-alert-icon">⚠️</span>
+              <span id="forgotAlertStep2Text" class="auth-alert-text"></span>
+            </div>
+            <form id="forgotFormStep2" onsubmit="handleResetPassword(event)">
+              <div class="form-group">
+                <label class="form-label" for="forgotOtp"
+                  >Nhập mã OTP từ Gmail (6 chữ số)</label
+                >
+                <input
+                  type="text"
+                  id="forgotOtp"
+                  class="form-control"
+                  placeholder="______"
+                  maxlength="6"
+                  pattern="[0-9]{6}"
+                  required
+                  style="
+                    letter-spacing: 6px;
+                    font-weight: bold;
+                    font-size: 1.25rem;
+                    text-align: center;
+                  "
+                />
               </div>
-            </div>
-            <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
-              <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="backToStep1()">
-                Quay lại
-              </button>
-              <button type="submit" class="btn btn-primary" style="flex: 2;" id="btnConfirmReset">
-                Đổi Mật Khẩu ➔
-              </button>
-            </div>
-          </form>
+              <div class="form-group">
+                <label class="form-label" for="forgotNewPassword"
+                  >Mật khẩu mới</label
+                >
+                <div class="password-input-group">
+                  <input
+                    type="password"
+                    id="forgotNewPassword"
+                    class="form-control"
+                    placeholder="Tối thiểu 6 ký tự"
+                    minlength="6"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle-btn"
+                    onclick="
+                      togglePasswordVisibility('forgotNewPassword', this)
+                    "
+                  >
+                    👁️
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="forgotConfirmPassword"
+                  >Xác nhận mật khẩu mới</label
+                >
+                <div class="password-input-group">
+                  <input
+                    type="password"
+                    id="forgotConfirmPassword"
+                    class="form-control"
+                    placeholder="Nhập lại mật khẩu mới"
+                    minlength="6"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle-btn"
+                    onclick="
+                      togglePasswordVisibility('forgotConfirmPassword', this)
+                    "
+                  >
+                    👁️
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.75rem; margin-top: 1rem">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  style="flex: 1"
+                  onclick="backToStep1()"
+                >
+                  Quay lại
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="flex: 2"
+                  id="btnConfirmReset"
+                >
+                  Đổi Mật Khẩu ➔
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="assets/js/main.js?v=2.2"></script>
-  <script src="assets/js/auth.js?v=2.2"></script>
-</body>
+    <!-- Scripts -->
+    <script src="assets/js/main.js?v=2.2"></script>
+    <script src="assets/js/auth.js?v=2.2"></script>
+  </body>
 </html>

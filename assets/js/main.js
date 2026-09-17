@@ -1,8 +1,3 @@
-/**
- * SMART TRIP PLANNER - MAIN JAVASCRIPT
- * Quản lý tương tác chung, Navbar, Auth State và Utilities
- * Phụ trách: Khang (Trưởng nhóm)
- */
 
 document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();

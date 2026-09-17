@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/planner.css
- * NGƯỜI PHỤ TRÁCH: Nguyên (STT 4 - Smart Planner)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Lập Lịch Trình (planner.html):
- * Planner Form, Day result cards, Schedule items, Budget health badge.
- */
 
 .planner-layout {
   display: grid;

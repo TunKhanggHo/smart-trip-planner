@@ -1,9 +1,4 @@
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/profile.js
- * NGƯỜI PHỤ TRÁCH: Vương, Khiêm (STT 7 - Hồ sơ cá nhân & Quản lý dữ liệu yêu thích)
- * ==============================================================================
  * Kết nối PHP API & MySQL:
  * - Tải thông tin tài khoản người dùng và thống kê số chuyến đi, số yêu thích.
  * - Cập nhật thông tin cá nhân vào bảng `users`.

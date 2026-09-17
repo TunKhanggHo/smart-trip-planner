@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/ai_planner.php
- * NGƯỜI PHỤ TRÁCH: Khang, Nguyên (Trí Tuệ Nhân Tạo Google Gemini AI)
- * ==============================================================================
  * Tự động tìm model tương thích nhất và sinh lịch trình dạng JSON chuẩn 100%.
  */
 

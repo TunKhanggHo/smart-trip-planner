@@ -1,10 +1,5 @@
 <?php
 /**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: api/favorites.php
- * NGƯỜI PHỤ TRÁCH: Vương, Khiêm
- * ==============================================================================
  * API Quản Lý Địa Điểm Yêu Thích (Favorites):
  * 1. Lấy danh sách ID các điểm đến đã thả tim.
  * 2. Thêm / Xóa yêu thích (Toggle).

@@ -1,16 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/auth.js
- * NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng nhập, Đăng ký & Xác thực hệ thống)
- * ==============================================================================
- * Kết nối PHP API & MySQL:
- * - Đăng nhập & Đăng ký với thông báo lỗi trực quan nội tuyến (Inline Alert).
- * - Quên mật khẩu đa bước với mã xác thực OTP (6 chữ số).
- * - Đăng ký 2 bước có xác thực mã OTP chống bot & email thật.
- * - Kiểm tra mật khẩu mã hóa BCRYPT trên MySQL.
- * - Hỗ trợ đăng nhập nhanh Demo 1-Click cho thầy cô chấm bài.
- */
 
 document.addEventListener('DOMContentLoaded', () => {
   initRegisterForm();

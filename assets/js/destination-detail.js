@@ -1,13 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/destination-detail.js
- * NGƯỜI PHỤ TRÁCH: Vương (STT 3 - Chi tiết địa điểm, Gallery, Tips & Reviews)
- * ==============================================================================
- * Kết nối PHP API & MySQL:
- * - Tải dữ liệu chi tiết điểm đến và danh sách đánh giá từ MySQL.
- * - Gửi đánh giá mới lên CSDL MySQL.
- */
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);

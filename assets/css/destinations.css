@@ -1,12 +1,4 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/css/destinations.css
- * NGƯỜI PHỤ TRÁCH: Khiêm (STT 2 - Khám phá địa điểm)
- * ==============================================================================
- * Định nghĩa giao diện cho Trang Khám Phá (destinations.html):
- * Page Header, Filter bar đa tiêu chí, Category tabs, Results status.
- */
+
 
 .page-header {
   background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);

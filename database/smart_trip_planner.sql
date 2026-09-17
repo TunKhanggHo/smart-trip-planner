@@ -1,9 +1,6 @@
--- ==============================================================================
--- DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
--- FILE: database/smart_trip_planner.sql
+-- ================================================
 -- CƠ SỞ DỮ LIỆU: MySQL / MariaDB (smart_trip_db)
--- NGƯỜI PHỤ TRÁCH: Khang, Khiêm, Vương, Nguyên, Huy
--- ==============================================================================
+-- ================================================
 
 CREATE DATABASE IF NOT EXISTS `smart_trip_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `smart_trip_db`;

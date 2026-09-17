@@ -1,11 +1,3 @@
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: assets/js/data.js
- * NGƯỜI PHỤ TRÁCH: Vương, Khiêm (STT 7 - Quản lý Dữ liệu & Mock Database)
- * ==============================================================================
- * Cung cấp dữ liệu địa điểm du lịch kết nối MySQL / PHP API & Dự phòng Mock Data.
- */
 
 const TRIP_DATA = {
   destinations: [

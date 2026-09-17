@@ -1,11 +1,4 @@
 <?php
-/**
- * ==============================================================================
- * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
- * FILE: config/mail.php
- * NGƯỜI PHỤ TRÁCH: Khang, Huy (Hệ thống gửi Email OTP tự động qua Google SMTP)
- * ==============================================================================
- */
 
 require_once __DIR__ . '/secrets.php';
 
