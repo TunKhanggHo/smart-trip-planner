@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: profile.html
+     NGƯỜI PHỤ TRÁCH: Vương, Khiêm (STT 7 - Hồ sơ cá nhân & Quản lý dữ liệu yêu thích)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Quản lý hồ sơ người dùng, các địa điểm du lịch yêu thích và thông tin cá nhân.">
+  <title>Hồ Sơ Cá Nhân - Smart Trip Planner</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body>
+
+  <!-- Header & Navbar (Khang) -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link">Lịch trình của tôi</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Handled by main.js -->
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header (Vương & Khiêm) -->
+  <div style="background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%); padding: 2.5rem 0; border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <span class="section-tag">Tài Khoản & Cá Nhân</span>
+      <h1 class="section-title" style="margin-bottom: 0.5rem;">Hồ Sơ Cá Nhân 👤</h1>
+      <p class="section-subtitle">Quản lý thông tin tài khoản và danh sách các địa điểm đã thả tim yêu thích.</p>
+    </div>
+  </div>
+
+  <!-- Main Content (Vương & Khiêm) -->
+  <main class="container section" style="padding-top: 0;">
+    <div class="profile-layout">
+      <!-- Left Column: Profile Card -->
+      <div class="profile-card">
+        <div class="avatar-large" id="profileAvatar">K</div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.25rem;" id="profileName">Khang</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;" id="profileEmail">khang@gmail.com</p>
+        
+        <div class="stats-badge-grid">
+          <div class="stat-item">
+            <div class="stat-number" id="statTripsCount">0</div>
+            <div class="stat-label">Chuyến đi đã lập</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="statFavsCount">0</div>
+            <div class="stat-label">Địa điểm yêu thích</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <a href="itinerary.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            🧳 Xem lịch trình của tôi
+          </a>
+          <button class="btn btn-outline btn-sm" style="width: 100%; color: var(--danger); border-color: #fecaca;" onclick="Auth.logout()">
+            Đăng xuất tài khoản
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Settings & Saved Favorites -->
+      <div>
+        <!-- Edit Profile Card -->
+        <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem;">⚙️ Thông Tin Cá Nhân</h3>
+          <form id="profileForm">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="editName">Họ và Tên</label>
+                <input type="text" id="editName" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="editEmail">Email liên hệ</label>
+                <input type="email" id="editEmail" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editPhone">Số điện thoại</label>
+              <input type="text" id="editPhone" class="form-control" placeholder="0901234567">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editBio">Giới thiệu ngắn (Bio)</label>
+              <textarea id="editBio" class="form-control" rows="2" placeholder="Chia sẻ phong cách du lịch của bạn..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
+              💾 Lưu Thay Đổi
+            </button>
+          </form>
+        </div>
+
+        <!-- Saved Favorites Section -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800;">❤️ Địa Điểm Đã Yêu Thích</h3>
+            <a href="destinations.html" style="font-size: 0.9rem; color: var(--primary); font-weight: 600;">+ Khám phá thêm</a>
+          </div>
+
+          <div class="destination-grid" id="favoritesGrid">
+            <!-- Rendered by profile.js -->
+          </div>
+
+          <div id="noFavoritesSaved" style="display: none; text-align: center; padding: 3.5rem 1rem; background: var(--bg-surface); border: 2px dashed var(--border-light); border-radius: var(--radius-lg);">
+            <p style="font-size: 2.5rem; margin-bottom: 0.5rem;">🤍</p>
+            <h4 style="font-weight: 700;">Chưa có địa điểm yêu thích nào</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0 1rem 0;">Hãy bấm vào biểu tượng ❤️ trên trang Khám phá để lưu lại những điểm đến bạn thích nhé.</p>
+            <a href="destinations.html" class="btn btn-outline btn-sm">Đến trang khám phá ➔</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Khang) -->
+  <footer class="site-footer" style="margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <p>&copy; 2026 Smart Trip Planner. Phụ trách Module Hồ Sơ Cá Nhân & Quản lý Dữ liệu: <strong>Vương, Khiêm</strong>.</p>
+        <p><a href="index.html" style="color: #38bdf8;">Về trang chủ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/profile.js"></script>
+</body>
+</html>

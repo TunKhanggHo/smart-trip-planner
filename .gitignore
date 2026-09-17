@@ -1,0 +1,6 @@
+# Thông tin nhạy cảm - không đẩy lên Git
+config/secrets.php
+
+# File hệ thống
+.DS_Store
+Thumbs.db

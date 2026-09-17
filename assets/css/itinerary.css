@@ -1,0 +1,102 @@
+/**
+ * ==============================================================================
+ * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+ * FILE: assets/css/itinerary.css
+ * NGƯỜI PHỤ TRÁCH: Huy (STT 5 - Lịch trình của tôi, Chi tiêu & Checklist)
+ * ==============================================================================
+ * Định nghĩa giao diện cho Trang Lịch Trình (itinerary.html):
+ * Tab navigation, Trip cards, Sổ chi tiêu Expense Table, Checklist hành lý.
+ */
+
+.tab-nav-bar {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-light);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+.itinerary-tab-btn {
+  padding: 0.85rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.itinerary-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.itinerary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.itinerary-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #bae6fd;
+}
+
+.itinerary-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.itinerary-card-body {
+  padding: 1.75rem;
+}
+
+.trip-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-alt);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+.itinerary-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Expense Table */
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+.expense-table th {
+  background: var(--bg-alt);
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-light);
+}

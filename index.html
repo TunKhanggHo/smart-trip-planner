@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: index.html
+     NGƯỜI PHỤ TRÁCH: Khang (Trưởng nhóm - STT 1 - Trang chủ & Quản lý Tích hợp)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smart Trip Planner - Ứng dụng lên lịch đi trốn thông minh, gợi ý lịch trình tự động theo ngày, tối ưu chi phí và khám phá các điểm đến hot nhất Việt Nam.">
+  <title>Smart Trip Planner - Lên Lịch Đi Trốn Thông Minh</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    /* Ép khung "Điểm đến nổi bật" trang chủ hiện đúng 4 cột trên 1 hàng, không bị lệch dòng */
+    #featuredGrid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    @media (max-width: 1024px) {
+      #featuredGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    @media (max-width: 480px) {
+      #featuredGrid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    /* Card trong khung này hẹp hơn bình thường (4 cột/hàng) nên xếp Giá và nút dọc
+       thay vì ngang, tránh bị dính chữ vào nhau */
+    #featuredGrid .card-footer {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+    #featuredGrid .card-footer .btn {
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+
+  <!-- ================= HEADER & NAVBAR (Khang) ================= -->
+  <header class="site-header" id="siteHeader">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo" id="brandLogo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link active">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link">Lịch trình của tôi</a></li>
+          
+          <!-- Mobile Actions -->
+          <li class="mobile-actions">
+            <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+            <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Populated by main.js (Auth state) -->
+          <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+          <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT (Khang) ================= -->
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-wrapper">
+          <div class="hero-content">
+            <div class="hero-badge animate-fade-in-up">
+              <span>🌟</span> Nền tảng lên lịch đi trốn thông minh 2026
+            </div>
+            <h1 class="hero-title animate-fade-in-up delay-100">
+              Lên Lịch Đi Trốn,<br><span>Trọn Vẹn Từng Giây!</span>
+            </h1>
+            <p class="hero-desc animate-fade-in-up delay-200">
+              Gợi ý lịch trình tự động theo ngày, tối ưu chi phí thông minh và khám phá những địa điểm chill nhất khắp Việt Nam chỉ trong vài cú click.
+            </p>
+
+            <!-- Quick Search Bar -->
+            <div class="search-box-card animate-fade-in-up delay-300">
+              <form id="heroSearchForm">
+                <div class="search-inputs-grid">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="heroDestinationInput">Điểm đến</label>
+                    <input type="text" id="heroDestinationInput" class="form-control" placeholder="Đà Lạt, Sa Pa, Phú Quốc...">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="heroBudgetSelect">Ngân sách / Ngày</label>
+                    <select id="heroBudgetSelect" class="form-control">
+                      <option value="">Tất cả mức giá</option>
+                      <option value="700000">Dưới 700.000 đ (Tiết kiệm)</option>
+                      <option value="1000000">700k - 1.000.000 đ (Vừa phải)</option>
+                      <option value="2000000">Trên 1.000.000 đ (Thoải mái)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="heroStyleSelect">Phong cách</label>
+                    <select id="heroStyleSelect" class="form-control">
+                      <option value="all">Tất cả thể loại</option>
+                      <option value="chill">☕ Nghỉ dưỡng / Chill</option>
+                      <option value="adventure">🏍️ Khám phá / Phượt</option>
+                      <option value="beach">🏖️ Biển đảo</option>
+                      <option value="nature">⛰️ Thiên nhiên / Núi</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg" id="btnHeroSearch">
+                    <span>Tìm kiếm</span> 🚀
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Hero Image Media -->
+          <div class="hero-visual animate-fade-in delay-200">
+            <div class="floating-card floating-card-1 animate-float">
+              <span style="font-size: 1.5rem;">⛅</span>
+              <div>
+                <div style="color: var(--text-muted); font-size: 0.75rem;">Thời tiết hôm nay</div>
+                <div style="color: var(--text-main);">Đà Lạt: 18°C Se lạnh</div>
+              </div>
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80" alt="Du lịch Việt Nam" class="hero-image-main">
+
+            <div class="floating-card floating-card-2 animate-float" style="animation-delay: -2s;">
+              <span style="font-size: 1.5rem;">✨</span>
+              <div>
+                <div style="color: var(--text-muted); font-size: 0.75rem;">Đề xuất thông minh</div>
+                <div style="color: var(--secondary);">Lịch trình tối ưu chi phí 100%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BANNER -->
+    <div class="container">
+      <div class="stats-bar">
+        <div>
+          <div class="stat-box-num">10.000+</div>
+          <div class="stat-box-desc">Lịch trình đã tạo</div>
+        </div>
+        <div>
+          <div class="stat-box-num">63</div>
+          <div class="stat-box-desc">Tỉnh thành toàn quốc</div>
+        </div>
+        <div>
+          <div class="stat-box-num">98.5%</div>
+          <div class="stat-box-desc">Đánh giá hài lòng</div>
+        </div>
+        <div>
+          <div class="stat-box-num">30%</div>
+          <div class="stat-box-desc">Tiết kiệm chi phí trung bình</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: TÍNH NĂNG NỔI BẬT -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Tính Năng Vượt Trội</div>
+          <h2 class="section-title">Mọi thứ bạn cần cho một chuyến đi hoàn hảo</h2>
+          <p class="section-subtitle">Không còn đau đầu tìm kiếm thông tin phân mảnh. Smart Trip Planner gom tất cả công cụ vào một nơi.</p>
+        </div>
+
+        <div class="destination-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+          <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3 class="feature-title">Smart Planner Tự Động</h3>
+            <p class="feature-desc">Nhập điểm đến, số ngày và ngân sách, hệ thống sẽ tự động sắp xếp lịch trình từ sáng đến tối theo lộ trình khoa học nhất.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3 class="feature-title">Kiểm Soát Chi Tiêu</h3>
+            <p class="feature-desc">Ước tính chi phí từng hoạt động (ăn uống, vé tham quan, di chuyển) và theo dõi ngân sách thực tế theo thời gian thực.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🌤️</div>
+            <h3 class="feature-title">Dự Báo Thời Tiết</h3>
+            <p class="feature-desc">Cập nhật tình hình thời tiết tại điểm đến để bạn chuẩn bị trang phục và điều chỉnh kế hoạch phù hợp nhất.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3 class="feature-title">Checklist Hành Lý</h3>
+            <p class="feature-desc">Danh sách nhắc nhở các vật dụng cần mang theo (giấy tờ, sạc dự phòng, thuốc men) giúp bạn không bỏ sót bất kỳ món đồ nào.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: ĐIỂM ĐẾN NỔI BẬT -->
+    <section class="section section-alt" id="featuredDestinations">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Khám Phá Điểm Đến</div>
+          <h2 class="section-title">Địa điểm "đi trốn" được yêu thích nhất</h2>
+          <p class="section-subtitle">Những tọa độ check-in tuyệt đẹp, ẩm thực khó cưỡng và trải nghiệm khó quên khắp Việt Nam.</p>
+        </div>
+
+        <!-- Destination Cards Render Container -->
+        <div class="destination-grid" id="featuredGrid">
+          <!-- Will be rendered by JavaScript from data.js -->
+        </div>
+
+        <div style="text-align: center; margin-top: 3.5rem;">
+          <a href="destinations.html" class="btn btn-outline btn-lg" id="btnExploreMore">
+            Xem tất cả điểm đến ➔
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: 3 BƯỚC LÊN LỊCH TRÌNH -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Quy Trình Đơn Giản</div>
+          <h2 class="section-title">Chỉ 3 bước để có ngay chuyến đi trong mơ</h2>
+        </div>
+
+        <div class="destination-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h3 class="feature-title">Chọn Thông Tin Chuyến Đi</h3>
+            <p class="feature-desc">Nhập điểm đến, số người, số ngày dự định và khoảng ngân sách bạn mong muốn chi trả.</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h3 class="feature-title">Nhận Đề Xuất Thông Minh</h3>
+            <p class="feature-desc">Hệ thống phân tích và sinh lịch trình chi tiết từng ngày (Sáng, Trưa, Chiều, Tối) kèm chi phí dự tính.</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h3 class="feature-title">Lưu & Xách Balo Đi Thôi</h3>
+            <p class="feature-desc">Lưu lại lịch trình vào tài khoản, đánh dấu checklist đồ đạc và sẵn sàng tận hưởng chuyến đi!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: CTA BANNER -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="cta-banner">
+          <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">
+            Sẵn sàng cho chuyến đi trốn tiếp theo?
+          </h2>
+          <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto 2rem auto; opacity: 0.9;">
+            Hãy để Smart Trip Planner đồng hành cùng bạn tạo nên những kỷ niệm đáng nhớ và tối ưu mọi chi phí.
+          </p>
+          <a href="planner.html" class="btn btn-white btn-lg" id="btnCtaPlanNow">
+            Bắt đầu tạo lịch trình ngay 🚀
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER (Khang) ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand">
+          <a href="index.html" class="brand-logo">
+            <div class="logo-icon">✈️</div>
+            <span>Trip<span>Planner</span></span>
+          </a>
+          <p class="footer-desc">
+            Nền tảng hỗ trợ lập kế hoạch du lịch thông minh, khám phá địa điểm và quản lý chi phí cho giới trẻ Việt Nam.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="social-btn" title="Facebook">🌐</a>
+            <a href="#" class="social-btn" title="Instagram">📷</a>
+            <a href="#" class="social-btn" title="TikTok">🎵</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Khám Phá</h4>
+          <ul class="footer-links">
+            <li><a href="destinations.html">Điểm đến nổi bật</a></li>
+            <li><a href="destinations.html?category=chill">Du lịch nghỉ dưỡng</a></li>
+            <li><a href="destinations.html?category=adventure">Phượt mạo hiểm</a></li>
+            <li><a href="destinations.html?category=beach">Biển đảo nhiệt đới</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Công Cụ</h4>
+          <ul class="footer-links">
+            <li><a href="planner.html">Smart Trip Planner</a></li>
+            <li><a href="itinerary.html">Lịch trình của tôi</a></li>
+            <li><a href="login.html">Đăng nhập / Đăng ký</a></li>
+            <li><a href="profile.html">Hồ sơ cá nhân</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Dự Án Bài Tập Lớn</h4>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem; color: #cbd5e1;"><strong>Môn:</strong> Lập Trình Web</p>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem; color: #cbd5e1;"><strong>Đề tài:</strong> Smart Trip Planner (Lên lịch đi trốn)</p>
+          <p style="font-size: 0.85rem; color: #94a3b8;">Nhóm thực hiện: Khang (Leader), Khiêm, Vương, Nguyên, Huy</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Trip Planner. Xây dựng với HTML5, CSS3 & JavaScript thuần.</p>
+        <p>Phụ trách Trang chủ & Tích hợp: <strong>Khang</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Render featured destinations with favorite toggle
+    document.addEventListener('DOMContentLoaded', async () => {
+      const grid = document.getElementById('featuredGrid');
+      if (!grid || !window.TripDataService) return;
+
+      grid.innerHTML = '<p style="text-align:center; color: var(--text-muted); grid-column: 1 / -1;">Đang tải dữ liệu...</p>';
+
+      // Lấy 4 điểm đến có rating cao nhất để làm nổi bật trên trang chủ
+      const allDestinations = await TripDataService.getAllDestinations();
+      const destinations = [...allDestinations]
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 4);
+
+      const favIds = await TripDataService.getFavorites();
+
+      grid.innerHTML = destinations.map(item => {
+        const isFav = Array.isArray(favIds) && favIds.includes(item.id);
+        return `
+          <article class="card destination-card hover-lift animate-fade-in">
+            <div class="card-media">
+              <span class="badge badge-accent card-badge">${escapeHtml(item.badge)}</span>
+              <button class="btn-fav card-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavCard(event, '${item.id}')" title="Thêm vào yêu thích">
+                ${isFav ? '❤️' : '🤍'}
+              </button>
+              <span class="card-rating">★ ${item.rating}</span>
+              <img src="${item.image}" alt="${escapeHtml(item.name)}" loading="lazy">
+            </div>
+            <div class="card-body">
+              <div class="card-location">📍 ${escapeHtml(item.city)} &bull; ${escapeHtml(item.categoryName)}</div>
+              <h3 class="card-title">${escapeHtml(item.name)}</h3>
+              <p class="card-desc">${escapeHtml(item.description)}</p>
+              <div class="card-footer">
+                <div class="card-price">
+                  <span class="price-label">Chi phí dự tính</span>
+                  <span class="price-value">${formatVND(item.avgCostPerDay)}/ngày</span>
+                </div>
+                <a href="destination-detail.html?id=${item.id}" class="btn btn-primary btn-sm">Xem chi tiết ➔</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    });
+
+    async function toggleFavCard(e, destId) {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      const isNowFav = await TripDataService.toggleFavorite(destId);
+      btn.classList.toggle('active', isNowFav);
+      btn.innerHTML = isNowFav ? '❤️' : '🤍';
+      showToast(isNowFav ? 'Đã thêm vào danh sách yêu thích!' : 'Đã xóa khỏi danh sách yêu thích!', 'info');
+    }
+  </script>
+</body>
+</html>

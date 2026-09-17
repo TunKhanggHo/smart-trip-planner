@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: admin.html
+     TRANG QUẢN TRỊ - CHỈ DÀNH CHO TÀI KHOẢN ADMIN
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Trang Quản Trị - Smart Trip Planner</title>
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+  <!-- Header & Navbar -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link">Lịch trình của tôi</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Handled by main.js -->
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div style="background: linear-gradient(180deg, #fff7ed 0%, #f8fafc 100%); padding: 2.5rem 0; border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <span class="section-tag">Khu Vực Quản Trị</span>
+      <h1 class="section-title" style="margin-bottom: 0.5rem;">Trang Quản Trị 🛠️</h1>
+      <p class="section-subtitle">Quản lý điểm đến, người dùng và đánh giá của toàn bộ hệ thống.</p>
+    </div>
+  </div>
+
+  <main class="container section" style="padding-top: 2rem;">
+    <!-- Tab điều hướng -->
+    <div class="admin-tab-nav">
+      <button class="admin-tab-btn active" data-target="tabStats">📊 Thống Kê</button>
+      <button class="admin-tab-btn" data-target="tabDestinations">🗺️ Điểm Đến</button>
+      <button class="admin-tab-btn" data-target="tabUsers">👥 Người Dùng</button>
+      <button class="admin-tab-btn" data-target="tabReviews">💬 Đánh Giá</button>
+    </div>
+
+    <!-- TAB 1: THỐNG KÊ TỔNG QUAN -->
+    <div class="admin-tab-pane" id="tabStats">
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon">👥</div>
+          <div class="admin-stat-number" id="statTotalUsers">0</div>
+          <div class="admin-stat-label">Tổng số người dùng</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon">🗺️</div>
+          <div class="admin-stat-number" id="statTotalDestinations">0</div>
+          <div class="admin-stat-label">Tổng số điểm đến</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon">🧳</div>
+          <div class="admin-stat-number" id="statTotalTrips">0</div>
+          <div class="admin-stat-label">Tổng số chuyến đi đã lập</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon">💬</div>
+          <div class="admin-stat-number" id="statTotalReviews">0</div>
+          <div class="admin-stat-label">Tổng số đánh giá</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏆 Top 5 Điểm Đến Đánh Giá Cao Nhất</h3>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Tên điểm đến</th><th>Thành phố</th><th>Điểm rating</th><th>Số review thực tế</th></tr>
+          </thead>
+          <tbody id="topDestinationsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: QUẢN LÝ ĐIỂM ĐẾN -->
+    <div class="admin-tab-pane" id="tabDestinations" style="display: none;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+        <button class="btn btn-primary btn-sm" onclick="openDestinationModal()">+ Thêm Điểm Đến Mới</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Tên</th><th>Thành phố</th><th>Giá/ngày</th><th>Rating</th><th>Hành động</th></tr>
+          </thead>
+          <tbody id="destinationsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: QUẢN LÝ NGƯỜI DÙNG -->
+    <div class="admin-tab-pane" id="tabUsers" style="display: none;">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th>Hành động</th></tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: QUẢN LÝ ĐÁNH GIÁ -->
+    <div class="admin-tab-pane" id="tabReviews" style="display: none;">
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+        Chọn 1 điểm đến để xem và quản lý các đánh giá thuộc điểm đến đó:
+      </p>
+      <select id="reviewDestSelect" class="form-control" style="max-width: 400px; margin-bottom: 1.5rem;">
+        <option value="">-- Chọn điểm đến --</option>
+      </select>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Người đăng</th><th>Rating</th><th>Nội dung</th><th>Ngày đăng</th><th>Hành động</th></tr>
+          </thead>
+          <tbody id="reviewsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Thêm / Sửa Điểm Đến -->
+  <div id="destinationModal" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-dialog">
+      <div class="admin-modal-header">
+        <h3 id="destinationModalTitle" style="font-size: 1.15rem; font-weight: 800;">Thêm Điểm Đến Mới</h3>
+        <button class="admin-modal-close" onclick="closeDestinationModal()">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="destinationForm">
+          <input type="hidden" id="destFormMode" value="create">
+          <div class="form-group">
+            <label class="form-label" for="destFormId">Mã ID (viết liền, không dấu, VD: dalat2)</label>
+            <input type="text" id="destFormId" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormName">Tên điểm đến</label>
+            <input type="text" id="destFormName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormCity">Thành phố / Khu vực</label>
+            <input type="text" id="destFormCity" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormCategory">Danh mục</label>
+            <select id="destFormCategory" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormBadge">Badge (nhãn nổi bật)</label>
+            <input type="text" id="destFormBadge" class="form-control" placeholder="Nổi bật">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormImage">URL hình ảnh</label>
+            <input type="text" id="destFormImage" class="form-control" placeholder="https://..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormCost">Chi phí trung bình / ngày (VNĐ)</label>
+            <input type="number" id="destFormCost" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="destFormDesc">Mô tả</label>
+            <textarea id="destFormDesc" class="form-control" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">💾 Lưu Điểm Đến</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <p>&copy; 2026 Smart Trip Planner. Khu vực Quản Trị Hệ Thống.</p>
+        <p><a href="index.html" style="color: #38bdf8;">Về trang chủ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

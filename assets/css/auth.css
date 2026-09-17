@@ -1,0 +1,206 @@
+/**
+ * ==============================================================================
+ * DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+ * FILE: assets/css/auth.css
+ * NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng nhập & Đăng ký)
+ * ==============================================================================
+ * Định nghĩa giao diện cho Trang Đăng Nhập & Đăng Ký (login.html & register.html):
+ * Auth cards, Password show/hide toggle, Demo 1-Click login box.
+ */
+
+.auth-page-wrapper {
+  min-height: calc(100vh - var(--header-height) - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+}
+
+.auth-card {
+  background-color: var(--bg-surface);
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-xl);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.password-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--text-muted);
+}
+
+.auth-footer-text {
+  text-align: center;
+  margin-top: 1.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-footer-text a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Thông báo lỗi & cảnh báo nội tuyến trong Form */
+.auth-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.auth-alert.error {
+  background-color: #fef2f2;
+  border: 1px solid #f87171;
+  color: #dc2626;
+}
+
+.auth-alert.success {
+  background-color: #ecfdf5;
+  border: 1px solid #34d399;
+  color: #059669;
+}
+
+.auth-alert-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.auth-alert-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Hiệu ứng rung nhẹ khi nhập sai */
+.auth-card.shake {
+  animation: shakeAnimation 0.4s ease;
+}
+
+@keyframes shakeAnimation {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+/* Modal Quên mật khẩu & OTP */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-modal-dialog {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auth-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.auth-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.auth-modal-close:hover {
+  color: var(--text-main);
+  background-color: var(--bg-alt);
+}
+
+.auth-modal-body {
+  padding: 1.5rem;
+}
+
+.otp-notice-box {
+  background: #ecfdf5;
+  border: 1px dashed #10b981;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.demo-otp-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: #047857;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+

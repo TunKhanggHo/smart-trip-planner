@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: itinerary.html
+     NGƯỜI PHỤ TRÁCH: Huy (STT 5 - Lịch trình của tôi, Sổ Chi tiêu & Checklist Hành lý)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Quản lý danh sách chuyến đi đã tạo, theo dõi chi tiêu thực tế và danh mục chuẩn bị hành lý.">
+  <title>Lịch Trình Của Tôi - Smart Trip Planner</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/itinerary.css">
+</head>
+<body>
+
+  <!-- Header & Navbar (Khang) -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link active">Lịch trình của tôi</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Title (Huy) -->
+  <div style="background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%); padding: 3rem 0; border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <span class="section-tag">Quản Lý Chuyến Đi</span>
+          <h1 class="section-title" style="margin-bottom: 0.5rem;">Lịch Trình Của Tôi 🧳</h1>
+          <p class="section-subtitle">Danh sách chuyến đi, theo dõi chi tiêu và danh mục chuẩn bị hành lý.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-outline btn-lg" onclick="window.print()">
+            🖨️ Xuất In / PDF
+          </button>
+          <a href="planner.html" class="btn btn-primary btn-lg">
+            + Tạo chuyến đi mới 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content (Huy) -->
+  <main class="container section" style="padding-top: 2rem;">
+    <!-- Navigation Tabs -->
+    <div class="tab-nav-bar">
+      <button class="itinerary-tab-btn active" data-target="tabTrips">
+        🗺️ Chuyến Đi Đã Lưu
+      </button>
+      <button class="itinerary-tab-btn" data-target="tabExpenses">
+        💰 Sổ Chi Tiêu Thực Tế
+      </button>
+      <button class="itinerary-tab-btn" data-target="tabChecklist">
+        📝 Checklist Hành Lý
+      </button>
+    </div>
+
+    <!-- TAB 1: DANH SÁCH CHUYẾN ĐI -->
+    <div class="itinerary-tab-pane" id="tabTrips">
+      <div id="myTripsList">
+        <!-- Rendered dynamically by itinerary.js -->
+      </div>
+
+      <div id="noTripsSaved" style="display: none; text-align: center; padding: 5rem 1rem; background: var(--bg-surface); border: 2px dashed var(--border-light); border-radius: var(--radius-lg);">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">🌴</div>
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Bạn chưa lưu chuyến đi nào!</h3>
+        <p style="color: var(--text-muted); margin: 0.75rem auto 1.75rem auto; max-width: 400px;">
+          Hãy vào phần Lập lịch trình để tạo ngay kế hoạch đi trốn và lưu lại tại đây nhé.
+        </p>
+        <a href="planner.html" class="btn btn-primary">Bắt đầu tạo lịch trình ngay 🚀</a>
+      </div>
+    </div>
+
+    <!-- TAB 2: SỔ CHI TIÊU THỰC TẾ (EXPENSE TRACKER) -->
+    <div class="itinerary-tab-pane" id="tabExpenses" style="display: none;">
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: flex-start;">
+        <!-- Add Expense Form -->
+        <div class="card" style="padding: 1.75rem;">
+          <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.25rem;">➕ Ghi Nhận Chi Tiêu</h3>
+          <form id="addExpenseForm">
+            <div class="form-group">
+              <label class="form-label" for="expTitle">Tên khoản chi</label>
+              <input type="text" id="expTitle" class="form-control" placeholder="Tiền xăng, bữa tối, vé cáp treo..." required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="expAmount">Số tiền (VNĐ)</label>
+              <input type="number" id="expAmount" class="form-control" placeholder="150000" step="10000" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="expCategory">Phân loại danh mục</label>
+              <select id="expCategory" class="form-control">
+                <option value="Ăn uống">🍜 Ăn uống & Ẩm thực</option>
+                <option value="Lưu trú">🏨 Phòng khách sạn / Homestay</option>
+                <option value="Di chuyển">🛵 Xăng xe / Thuê xe / Vé xe</option>
+                <option value="Vé tham quan">🎟️ Vé vào cổng / Tour trải nghiệm</option>
+                <option value="Mua sắm & Quà">🎁 Quà lưu niệm & Mua sắm</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+              Thêm khoản chi 💵
+            </button>
+          </form>
+        </div>
+
+        <!-- Expenses Table & Total -->
+        <div>
+          <div style="background: var(--bg-surface); padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-light); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Tổng chi tiêu thực tế đã ghi nhận:</div>
+              <div style="font-size: 1.85rem; font-weight: 800; color: var(--accent);" id="expenseTotalSpent">0 đ</div>
+            </div>
+            <span class="badge badge-secondary" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Đã đồng bộ LocalStorage</span>
+          </div>
+
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Khoản chi</th>
+                <th>Danh mục</th>
+                <th>Ngày chi</th>
+                <th>Số tiền</th>
+                <th style="text-align: center;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CHECKLIST HÀNH LÝ -->
+    <div class="itinerary-tab-pane" id="tabChecklist" style="display: none;">
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2.5rem; align-items: flex-start;">
+        <!-- Checklist Items List -->
+        <div class="card" style="padding: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800;">🎒 Danh Sách Đồ Cần Mang</h3>
+            <span id="checklistProgressText" style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">0%</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="checklistProgressBar" style="width: 0%;"></div>
+          </div>
+
+          <div id="checklistContainer" style="margin-top: 1.5rem;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Add Custom Item Form -->
+        <div class="card" style="padding: 1.75rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1.25rem;">➕ Thêm Vật Dụng Mới</h3>
+          <form id="addChecklistForm">
+            <div class="form-group">
+              <label class="form-label" for="chkItemName">Tên món đồ</label>
+              <input type="text" id="chkItemName" class="form-control" placeholder="Kính râm, sạc tai nghe, dù..." required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="chkItemCategory">Nhóm đồ</label>
+              <select id="chkItemCategory" class="form-control">
+                <option value="Giấy tờ tùy thân">📄 Giấy tờ tùy thân</option>
+                <option value="Đồ điện tử">📱 Đồ điện tử & Công nghệ</option>
+                <option value="Trang phục">👕 Trang phục & Giày dép</option>
+                <option value="Y tế & Cá nhân">💊 Y tế & Đồ dùng cá nhân</option>
+                <option value="Khác">🎒 Đồ dùng khác</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+              Thêm vào danh sách 📋
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Khang) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <p>&copy; 2026 Smart Trip Planner. Phụ trách Module Lịch Trình & Chi Tiêu: <strong>Huy</strong>.</p>
+        <p><a href="index.html" style="color: #38bdf8;">Về trang chủ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/itinerary.js"></script>
+</body>
+</html>

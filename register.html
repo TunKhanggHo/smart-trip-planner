@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: register.html
+     NGƯỜI PHỤ TRÁCH: Huy, Khang (STT 6 - Đăng ký thành viên mới & Xác thực OTP)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Đăng ký tài khoản Smart Trip Planner miễn phí với xác thực OTP bảo mật.">
+  <title>Đăng Ký Tài Khoản - Smart Trip Planner</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css?v=2.2">
+  <link rel="stylesheet" href="assets/css/animation.css?v=2.2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=2.2">
+  <link rel="stylesheet" href="assets/css/auth.css?v=2.2">
+</head>
+<body>
+
+  <!-- Header (Khang) -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+        <div class="nav-actions">
+          <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Auth Content (Huy & Khang) -->
+  <main class="auth-page-wrapper">
+    <div class="auth-card animate-fade-in-up" id="registerCard">
+      <div class="auth-header">
+        <h1 class="auth-title">Tạo Tài Khoản Mới ✨</h1>
+        <p class="auth-subtitle">Xác thực email qua mã OTP để bảo mật tài khoản & chống bot</p>
+      </div>
+
+      <!-- BƯỚC 1: ĐIỀN THÔNG TIN ĐĂNG KÝ -->
+      <div id="regStep1">
+        <!-- Khung thông báo lỗi trực tiếp -->
+        <div id="registerAlert" class="auth-alert error" style="display: none;">
+          <span class="auth-alert-icon">⚠️</span>
+          <span id="registerAlertText" class="auth-alert-text"></span>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegisterStep1(event)">
+          <div class="form-group">
+            <label class="form-label" for="regName">Họ và Tên</label>
+            <input type="text" id="regName" class="form-control" placeholder="Nguyễn Văn A" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Địa chỉ Email</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="vidu@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Mật khẩu</label>
+            <div class="password-input-group">
+              <input type="password" id="regPassword" class="form-control" placeholder="Tối thiểu 6 ký tự" minlength="6" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regConfirmPassword">Xác nhận Mật khẩu</label>
+            <div class="password-input-group">
+              <input type="password" id="regConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regConfirmPassword', this)">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;" id="btnRegisterSubmit">
+            Tiếp Tục: Gửi Mã OTP Qua Email ➔
+          </button>
+        </form>
+      </div>
+
+      <!-- BƯỚC 2: NHẬP MÃ OTP ĐỂ HOÀN TẤT ĐĂNG KÝ -->
+      <div id="regStep2" style="display: none;">
+        <div class="otp-notice-box">
+          <p style="margin: 0; font-size: 0.95rem; color: #065f46; font-weight: 600;">
+            📩 Hệ thống đã gửi mã OTP (6 chữ số) đến hộp thư Gmail: <br>
+            <strong id="displayRegTargetEmail" style="font-size: 1.05rem; color: #047857;"></strong>
+          </p>
+          <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #047857; background: #e6f4ea; padding: 0.6rem 0.85rem; border-radius: 8px; line-height: 1.5;">
+            👉 <strong>Vui lòng mở ứng dụng Gmail (hoặc mail.google.com)</strong> của bạn, kiểm tra hộp thư đến (hoặc mục Spam/Thư rác) để lấy mã OTP nhập vào bên dưới.
+          </div>
+        </div>
+
+        <div id="registerAlertStep2" class="auth-alert error" style="display: none;">
+          <span class="auth-alert-icon">⚠️</span>
+          <span id="registerAlertStep2Text" class="auth-alert-text"></span>
+        </div>
+
+        <form id="verifyRegisterForm" onsubmit="handleVerifyRegister(event)">
+          <div class="form-group">
+            <label class="form-label" for="regOtp">Nhập mã OTP từ Gmail (6 chữ số)</label>
+            <input type="text" id="regOtp" class="form-control" placeholder="______" maxlength="6" pattern="[0-9]{6}" required style="letter-spacing: 8px; font-weight: bold; font-size: 1.35rem; text-align: center;">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;" id="btnVerifyRegSubmit">
+            Xác Nhận OTP & Tạo Tài Khoản 🚀
+          </button>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; font-size: 0.88rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="backToRegStep1()">
+              ← Sửa thông tin
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="btnResendRegOtp" onclick="resendRegisterOtp()">
+              🔄 Gửi lại mã OTP
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="auth-footer-text">
+        Đã có tài khoản? <a href="login.html">Đăng nhập tại đây</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js?v=2.2"></script>
+  <script src="assets/js/auth.js?v=2.2"></script>
+</body>
+</html>

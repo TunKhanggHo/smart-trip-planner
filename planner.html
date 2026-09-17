@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: planner.html
+     NGƯỜI PHỤ TRÁCH: Nguyên (STT 4 - Lập lịch trình & Smart Planner)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tự động tạo lịch trình du lịch thông minh, tối ưu ngân sách và thời gian theo từng buổi trong ngày.">
+  <title>Smart Planner - Lập Lịch Trình Thông Minh</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/planner.css">
+</head>
+<body>
+
+  <!-- Header & Navbar (Khang) -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link active">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link">Lịch trình của tôi</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header (Nguyên) -->
+  <div style="background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%); padding: 2.5rem 0; border-bottom: 1px solid var(--border-light);">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag">🤖 Gợi Ý Lịch Trình Bằng Trí Tuệ Nhân Tạo</span>
+      <h1 class="section-title" style="margin-bottom: 0.5rem;">Smart Trip Planner</h1>
+      <p class="section-subtitle">Chỉ cần nhập thông số chuyến đi, Google Gemini AI sẽ tạo lịch trình phù hợp nhất cho bạn.</p>
+    </div>
+  </div>
+
+  <!-- Main Content (Nguyên) -->
+  <main class="container section" style="padding-top: 0;">
+    <div class="planner-layout">
+      <!-- Left Column: Form Controls -->
+      <div class="form-card">
+        <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem;">🛠️ Thiết Lập Chuyến Đi</h2>
+        
+        <form id="smartPlannerForm">
+          <div class="form-group">
+            <label class="form-label" for="planDestination">Điểm đến mong muốn</label>
+            <select id="planDestination" class="form-control" required>
+              <optgroup label="🏔️ Miền Bắc (Tây Bắc & Đông Bắc)">
+                <option value="sapa">Sa Pa (Lào Cai)</option>
+                <option value="hagiang">Hà Giang (Cực Bắc)</option>
+                <option value="ninhbinh">Ninh Bình (Tràng An - Tam Cốc)</option>
+                <option value="halong">Vịnh Hạ Long (Quảng Ninh)</option>
+                <option value="taxua">Tà Xùa (Sơn La - Săn Mây)</option>
+                <option value="mocchau">Mộc Châu (Sơn La - Đồi Chè)</option>
+                <option value="caobang">Cao Bằng (Thác Bản Giốc)</option>
+                <option value="hanoi">Hà Nội (Thủ Đô 36 Phố Phường)</option>
+                <option value="maichau">Mai Châu (Hòa Bình)</option>
+                <option value="coto">Đảo Cô Tô (Quảng Ninh)</option>
+                <option value="catba">Cát Bà (Hải Phòng - Vịnh Lan Hạ)</option>
+                <option value="tamdao">Tam Đảo (Vĩnh Phúc)</option>
+              </optgroup>
+
+              <optgroup label="🏖️ Miền Trung & Tây Nguyên">
+                <option value="dalat" selected>Đà Lạt (Lâm Đồng - Thành Phố Mộng Mơ)</option>
+                <option value="danang">Đà Nẵng & Hội An (Hành Trình Di Sản)</option>
+                <option value="hue">Huế (Cố Đô Trầm Mặc)</option>
+                <option value="quynhon">Quy Nhơn (Bình Định - Kỳ Co & Eo Gió)</option>
+                <option value="nhatrang">Nha Trang (Khánh Hòa - Vịnh Biển San Hô)</option>
+                <option value="phuyen">Phú Yên (Xứ Hoa Vàng Trên Cỏ Xanh)</option>
+                <option value="quangbinh">Quảng Bình (Phong Nha & Kẻ Bàng)</option>
+                <option value="mangden">Măng Đen (Kon Tum - Đại Ngàn Chữa Lành)</option>
+                <option value="buonmathuot">Buôn Ma Thuột (Đắk Lắk - Thủ Phủ Cà Phê)</option>
+                <option value="phanthiet">Phan Thiết & Mũi Né (Bình Thuận - Đồi Cát)</option>
+                <option value="ninhthuan">Ninh Thuận (Vịnh Vĩnh Hy & Vườn Nho)</option>
+              </optgroup>
+
+              <optgroup label="🌴 Miền Nam & Biển Đảo">
+                <option value="phuquoc">Phú Quốc (Kiên Giang - Đảo Ngọc)</option>
+                <option value="condao">Côn Đảo (Bà Rịa - Vũng Tàu)</option>
+                <option value="vungtau">Vũng Tàu (Đi Trốn Cuối Tuần)</option>
+                <option value="cantho">Cần Thơ (Sông Nước & Chợ Nổi Cái Răng)</option>
+                <option value="tayninh">Tây Ninh (Nóc Nhà Nam Bộ Núi Bà Đen)</option>
+                <option value="angiang">An Giang (Rừng Tràm Trà Sư & Châu Đốc)</option>
+                <option value="saigon">TP. Hồ Chí Minh (Sài Gòn Sôi Động)</option>
+              </optgroup>
+
+              <optgroup label="✨ Khác">
+                <option value="custom">✍️ Tự nhập điểm đến bất kỳ khác...</option>
+              </optgroup>
+            </select>
+
+            <div id="customDestWrap" style="display: none; margin-top: 0.75rem;">
+              <input type="text" id="customDestInput" class="form-control" placeholder="Nhập tên địa điểm bạn muốn đi (VD: Đảo Lý Sơn, Măng Đen, Bangkok...)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planStartDate">Ngày khởi hành</label>
+            <input type="date" id="planStartDate" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planDays">Số ngày đi</label>
+            <select id="planDays" class="form-control">
+              <option value="2">2 Ngày 1 Đêm</option>
+              <option value="3" selected>3 Ngày 2 Đêm (Khuyên dùng)</option>
+              <option value="4">4 Ngày 3 Đêm</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planPeople">Số lượng người tham gia</label>
+            <input type="number" id="planPeople" class="form-control" value="2" min="1" max="20" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planBudget">Ngân sách dự tính (VNĐ / Người)</label>
+            <input type="number" id="planBudget" class="form-control" value="2500000" step="100000" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planVehicle">Phương tiện chính</label>
+            <select id="planVehicle" class="form-control">
+              <option value="motorbike">🏍️ Xe máy phượt</option>
+              <option value="coach">🚌 Xe khách giường nằm</option>
+              <option value="airplane">✈️ Máy bay</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="planStyle">Phong cách chuyến đi</label>
+            <select id="planStyle" class="form-control">
+              <option value="chill">☕ Nghỉ dưỡng & Chill</option>
+              <option value="adventure">🏍️ Khám phá mạo hiểm</option>
+              <option value="foodie">🍜 Thiên đường ẩm thực</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn btn-lg" style="width: 100%; margin-top: 1.25rem; background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); color: #ffffff; border: none; font-weight: 800; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);" id="btnGenerateAI">
+            🤖 Tạo Bằng Trí Tuệ Nhân Tạo AI (Gemini)
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Column: Result Itinerary -->
+      <div id="plannerResultsArea">
+        <!-- Loading State -->
+        <div id="plannerLoading" class="loading-spinner-box">
+          <div style="font-size: 3rem; margin-bottom: 1rem;" class="animate-spin">⚙️</div>
+          <h3 style="font-size: 1.35rem; font-weight: 800;">Đang tối ưu lịch trình và tính toán ngân sách...</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Hệ thống đang chấm điểm các địa điểm và phân bổ hoạt động sáng, trưa, chiều, tối khoa học nhất.</p>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div id="plannerEmpty" style="text-align: center; padding: 4rem 1rem; background: var(--bg-surface); border: 2px dashed var(--border-light); border-radius: var(--radius-lg);">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🗺️</div>
+          <h3 style="font-size: 1.35rem; font-weight: 800;">Chưa có lịch trình nào được tạo</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem; max-width: 440px; margin-left: auto; margin-right: auto;">
+            Hãy điền các thông số chuyến đi ở cột bên trái và bấm <strong>"Tạo Lịch Trình Tự Động"</strong> để xem kết quả chi tiết!
+          </p>
+        </div>
+
+        <!-- Generated Result Content -->
+        <div id="plannerResultContent" style="display: none;">
+          <!-- Budget Summary -->
+          <div class="budget-summary-badge" id="budgetSummaryBox">
+            <div>
+              <span>📊 Tổng chi phí dự tính: </span>
+              <span id="resTotalCost" style="color: var(--accent); font-size: 1.15rem;">0 đ / người</span>
+            </div>
+            <div id="resBudgetStatus">
+              <!-- Status message -->
+            </div>
+          </div>
+
+          <!-- Days List Container -->
+          <div id="resDaysContainer">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-lg" id="btnSaveTrip" style="flex: 1; min-width: 240px;">
+              💾 Lưu Vào "Lịch Trình Của Tôi"
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="window.print()">
+              🖨️ In / Xuất PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Khang) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <p>&copy; 2026 Smart Trip Planner. Phụ trách Module Lập Lịch Trình: <strong>Nguyên</strong>.</p>
+        <p><a href="index.html" style="color: #38bdf8;">Về trang chủ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/planner.js"></script>
+</body>
+</html>

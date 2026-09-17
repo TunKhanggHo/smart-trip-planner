@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<!-- ==============================================================================
+     DỰ ÁN: SMART TRIP PLANNER (LÊN LỊCH ĐI TRỐN)
+     FILE: destinations.html
+     NGƯỜI PHỤ TRÁCH: Khiêm (STT 2 - Khám phá địa điểm & Bộ lọc tìm kiếm)
+     ============================================================================== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Khám phá các địa điểm du lịch hot nhất Việt Nam, tìm kiếm theo ngân sách và phong cách đi trốn.">
+  <title>Khám Phá Điểm Đến - Smart Trip Planner</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animation.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/destinations.css">
+</head>
+<body>
+
+  <!-- Header & Navbar (Khang) -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">✈️</div>
+          <span>Trip<span>Planner</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="destinations.html" class="nav-link active">Khám phá</a></li>
+          <li><a href="planner.html" class="nav-link">Lập lịch trình</a></li>
+          <li><a href="itinerary.html" class="nav-link">Lịch trình của tôi</a></li>
+          
+          <li class="mobile-actions">
+            <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+            <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+          <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
+        </div>
+
+        <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header (Khiêm) -->
+  <div class="page-header">
+    <div class="container">
+      <div class="section-tag">Khám Phá Địa Điểm</div>
+      <h1 class="section-title">Nơi Nào Dành Cho Chuyến Đi Của Bạn?</h1>
+      <p class="section-subtitle">Tìm kiếm theo phong cách chill, phượt mạo hiểm, biển đảo hay ngân sách mong muốn.</p>
+
+      <div class="category-tabs" id="categoryTabs">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content (Khiêm) -->
+  <main class="section" style="padding-top: 0;">
+    <div class="container">
+      <!-- Search & Filter Controls -->
+      <div class="filter-bar">
+        <div style="flex: 1.5; min-width: 220px;">
+          <input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên địa điểm, tỉnh thành, thẻ tag...">
+        </div>
+        
+        <div style="flex: 1; min-width: 170px;">
+          <select id="budgetFilter" class="form-control">
+            <option value="">Tất cả mức giá</option>
+            <option value="650000">Dưới 650k / ngày (Tiết kiệm)</option>
+            <option value="900000">Dưới 900k / ngày (Vừa phải)</option>
+            <option value="1500000">Dưới 1.5tr / ngày (Thoải mái)</option>
+          </select>
+        </div>
+
+        <div style="flex: 1; min-width: 170px;">
+          <select id="sortFilter" class="form-control">
+            <option value="rating">★ Đánh giá cao nhất</option>
+            <option value="price_asc">💰 Giá tăng dần</option>
+            <option value="price_desc">💎 Giá giảm dần</option>
+          </select>
+        </div>
+
+        <button class="btn btn-outline" id="btnResetFilter" style="padding: 0.75rem 1.25rem;">
+          Đặt lại 🔄
+        </button>
+      </div>
+
+      <!-- Results Count Status -->
+      <div class="results-status-bar">
+        <span class="badge badge-primary" id="resultCountBadge" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+          Đang tải dữ liệu...
+        </span>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">
+          Bấm vào biểu tượng ❤️ trên mỗi thẻ để lưu điểm đến
+        </span>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="destination-grid" id="destinationsGrid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- No Results State -->
+      <div id="noResults" style="display: none; text-align: center; padding: 4rem 1rem;">
+        <p style="font-size: 3.5rem; margin-bottom: 1rem;">🏝️</p>
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Không tìm thấy địa điểm phù hợp</h3>
+        <p style="color: var(--text-muted); margin-top: 0.5rem;">Hãy thử tìm kiếm từ khóa khác hoặc điều chỉnh lại bộ lọc ngân sách.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Khang) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2026 Smart Trip Planner. Phụ trách Module Khám Phá: <strong>Khiêm</strong>.</p>
+        <p><a href="index.html" style="color: #38bdf8;">Về trang chủ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/destinations.js"></script>
+</body>
+</html>
