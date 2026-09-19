@@ -7,17 +7,18 @@
 
 ## 👥 1. BẢNG PHÂN CÔNG CÔNG VIỆC NHÓM (5 THÀNH VIÊN)
 
-| STT | Module | Người phụ trách | File HTML | File JS / CSS | Chi tiết công việc đã hoàn thành |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | **Trang chủ + Tích hợp** | **Khang** *(Leader)* | [`index.html`](index.html) | `style.css`, `responsive.css`, `animation.css`, `main.js` | Quản lý dự án, thiết kế Core Design System, Header, Navbar sticky, Hero tìm kiếm, Thống kê, Điểm đến hot, CTA, Footer. |
-| **2** | **Khám phá địa điểm** | **Khiêm** | [`destinations.html`](destinations.html) | `destinations.js` | Tìm kiếm tức thì, bộ lọc theo phong cách du lịch, khoảng ngân sách, sắp xếp giá/đánh giá, nút lưu Yêu thích (❤️). |
-| **3** | **Chi tiết địa điểm** | **Vương** | [`destination-detail.html`](destination-detail.html) | `destination-detail.js` | Gallery đổi ảnh tương tác, widget thời tiết, mẹo du lịch (Tips), lịch trình mẫu theo giờ, hệ thống đánh giá Review & Sao. |
-| **4** | **Lập lịch trình thông minh** | **Nguyên** | [`planner.html`](planner.html) | `planner.js`, `api/ai_planner.php` | Form khảo sát chuyến đi, tạo lịch trình 100% bằng Google Gemini AI theo từng buổi (Sáng, Trưa, Chiều, Tối), thêm/xóa hoạt động tùy chỉnh, đo ngân sách. Nếu AI lỗi/mất mạng sẽ báo lỗi rõ ràng để thử lại, không tạo dữ liệu giả. |
-| **5** | **Lịch trình của tôi** | **Huy** | [`itinerary.html`](itinerary.html) | `itinerary.js` | Quản lý chuyến đi (Xem/Sửa tên/Nhân bản/Xóa), Sổ tay theo dõi Chi tiêu thực tế (Expense Tracker), Checklist hành lý phân loại, Xuất in PDF. |
-| **6** | **Đăng nhập & Đăng ký** | **Huy, Khang** | [`login.html`](login.html), [`register.html`](register.html) | `auth.js`, `api/auth.php` | Form validation, Ẩn/Hiện mật khẩu, Đăng ký xác thực qua mã OTP gửi email, chống trùng email/họ tên, lưu phiên bằng PHP Session. |
-| **7** | **Hồ sơ cá nhân & Quản lý dữ liệu** | **Vương, Khiêm** | [`profile.html`](profile.html) | `profile.js`, `data.js` | Cập nhật thông tin cá nhân, thống kê số chuyến đi, quản lý danh sách địa điểm đã thả tim (Favorites), gọi API lấy 30 điểm đến từ CSDL MySQL. |
-| **8** | **Trang Quản Trị (Admin)** | **Khang** | [`admin.html`](admin.html) | `admin.js`, `api/admin_stats.php`, `api/admin_users.php` | Phân quyền Admin/User qua PHP Session, Dashboard thống kê tổng quan, CRUD điểm đến, Khóa/Mở tài khoản vi phạm, Xóa đánh giá bậy bạ. |
-| **9** | **Kiểm thử & Báo cáo** | **Cả nhóm** | Toàn bộ | Toàn bộ | Kiểm thử liên kết các trang, kiểm tra Responsive Mobile/Tablet/Desktop, hoàn thiện tài liệu README. |
+| STT | Module | Người phụ trách | File HTML | File Frontend (JS/CSS) | File Backend (PHP) | Chi tiết công việc đã hoàn thành |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | **Trang chủ + Tích hợp** | **Khang** *(Leader)* | [`index.html`](index.html) | `style.css`, `responsive.css`, `animation.css`, `main.js` | `api/destinations.php` (list) | Quản lý dự án, thiết kế Core Design System, Header, Navbar sticky, Hero tìm kiếm, Thống kê, Điểm đến hot, CTA, Footer. |
+| **2** | **Khám phá địa điểm** | **Khiêm** | [`destinations.html`](destinations.html) | `destinations.js` | `api/destinations.php` (list, filter), `api/favorites.php` | Tìm kiếm tức thì, bộ lọc theo phong cách du lịch, khoảng ngân sách, sắp xếp giá/đánh giá, nút lưu Yêu thích (❤️). |
+| **3** | **Chi tiết địa điểm** | **Vương** | [`destination-detail.html`](destination-detail.html) | `destination-detail.js` | `api/destinations.php` (detail), `api/reviews.php`, `api/favorites.php` | Gallery đổi ảnh tương tác, widget thời tiết, mẹo du lịch (Tips), lịch trình mẫu theo giờ, hệ thống đánh giá Review & Sao. |
+| **4** | **Lập lịch trình thông minh** | **Nguyên** | [`planner.html`](planner.html) | `planner.js` | `api/ai_planner.php`, `api/trips.php` (create) | Form khảo sát chuyến đi, tạo lịch trình 100% bằng Google Gemini AI theo từng buổi (Sáng, Trưa, Chiều, Tối), thêm/xóa hoạt động tùy chỉnh, đo ngân sách. Nếu AI lỗi/mất mạng sẽ báo lỗi rõ ràng để thử lại, không tạo dữ liệu giả. |
+| **5** | **Lịch trình của tôi** | **Huy** | [`itinerary.html`](itinerary.html) | `itinerary.js` | `api/trips.php` (list, delete, update_name), `api/expenses.php`, `api/checklists.php` | Quản lý chuyến đi (Xem/Sửa tên/Nhân bản/Xóa), Sổ tay theo dõi Chi tiêu thực tế (Expense Tracker), Checklist hành lý phân loại, Xuất in PDF. Trang Private, kiểm tra quyền sở hữu dữ liệu chống IDOR. |
+| **6** | **Đăng nhập & Đăng ký** | **Huy, Khang** | [`login.html`](login.html), [`register.html`](register.html) | `auth.js` | `api/auth.php` (login, send_register_otp, verify_register, forgot_password, reset_password), `config/mail.php` | Form validation, Ẩn/Hiện mật khẩu, Đăng ký xác thực qua mã OTP gửi email, chống trùng email, lưu phiên bằng PHP Session. |
+| **7** | **Hồ sơ cá nhân & Quản lý dữ liệu** | **Vương, Khiêm** | [`profile.html`](profile.html) | `profile.js`, `data.js` | `api/auth.php` (me, update_profile), `api/favorites.php` (list) | Cập nhật thông tin cá nhân, thống kê số chuyến đi, quản lý danh sách địa điểm đã thả tim (Favorites), gọi API lấy 30 điểm đến từ CSDL MySQL. Trang Private. |
+| **8** | **Trang Quản Trị (Admin)** | **Khang** | [`admin.html`](admin.html) | `admin.js`, `admin.css` | `api/admin_stats.php`, `api/admin_users.php`, `api/destinations.php` (create, update, delete), `api/reviews.php` (delete), `config/auth_helper.php` | Phân quyền Admin/User qua PHP Session, Dashboard thống kê tổng quan, CRUD điểm đến, Khóa/Mở tài khoản vi phạm, Xóa đánh giá bậy bạ. |
+| **9** | **Hạ tầng chung & Bảo mật** | **Cả nhóm** | — | — | `config/database.php`, `config/secrets.php` | Kết nối CSDL PDO dùng chung, mã hóa mật khẩu Bcrypt, chống XSS (`escapeHtml()`), chống IDOR, tách biệt API Key/mật khẩu khỏi source code. |
+| **10** | **Kiểm thử & Báo cáo** | **Cả nhóm** | Toàn bộ | Toàn bộ | Toàn bộ | Kiểm thử liên kết các trang, kiểm tra Responsive Mobile/Tablet/Desktop, hoàn thiện tài liệu README. |
 
 ---
 
@@ -44,7 +45,7 @@ smart-trip-planner/
 │   └── secrets.example.php           # File mẫu an toàn, thay cho secrets.php khi đẩy code lên Git
 ├── database/
 │   ├── smart_trip_planner.sql        # Script tạo CSDL đầy đủ + 30 điểm đến mẫu (dùng khi cài mới)
-│   └── migration_add_is_banned.sql   # Script thêm cột khóa tài khoản (dùng khi đã có CSDL cũ)
+│  
 ├── assets/
 │   ├── css/
 │   │   ├── style.css                # Design System: Màu sắc, typography, cards, buttons, modals, print
