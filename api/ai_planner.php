@@ -49,6 +49,7 @@ YÊU CẦU BẮT BUỘC:
 2. Tên các địa danh, quán ăn, món ăn phải có thật 100% tại {$city} và phù hợp với phong cách {$style}.
 3. Phân bổ chi phí dự tính hợp lý bằng số nguyên VNĐ cho từng hoạt động sao cho tổng chi phí xấp xỉ ngân sách {$budget} VNĐ.
 4. Trả về KẾT QUẢ DUY NHẤT LÀ MÃ JSON KHÔNG KÈM BẤT KỲ LỜI MỞ ĐẦU HAY GIẢI THÍCH NÀO.
+5. Tuyệt đối KHÔNG gợi ý dịch vụ 'thuê xe máy' nếu phương tiện là xe máy phượt cá nhân.
 
 CẤU TRÚC JSON MẪU:
 {

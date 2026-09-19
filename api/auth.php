@@ -54,15 +54,6 @@ switch ($action) {
             exit();
         }
 
-        // Kiểm tra Họ và Tên đã được sử dụng chưa (không phân biệt hoa/thường, khoảng trắng thừa)
-        $checkNameStmt = $db->prepare("SELECT id FROM users WHERE LOWER(TRIM(full_name)) = LOWER(TRIM(:full_name))");
-        $checkNameStmt->execute([':full_name' => $fullName]);
-        if ($checkNameStmt->rowCount() > 0) {
-            http_response_code(409);
-            echo json_encode(["status" => "error", "message" => "Tên người dùng \"$fullName\" đã tồn tại trong hệ thống! Vui lòng đổi họ tên khác hoặc dùng email khác để đăng ký."], JSON_UNESCAPED_UNICODE);
-            exit();
-        }
-
         // Sinh mã OTP 6 số ngẫu nhiên
         $otp = sprintf("%06d", mt_rand(100000, 999999));
         $_SESSION['register_temp'] = [
@@ -113,18 +104,15 @@ switch ($action) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $avatar = strtoupper(mb_substr($fullName, 0, 1, 'UTF-8'));
 
-        // Kiểm tra lại lần cuối trước khi ghi vào CSDL, phòng trường hợp có người khác
-        // vừa đăng ký trùng email/tên trong lúc mình đang nhập mã OTP
-        $recheckStmt = $db->prepare("SELECT email, LOWER(TRIM(full_name)) AS name_norm FROM users WHERE email = :email OR LOWER(TRIM(full_name)) = LOWER(TRIM(:full_name))");
-        $recheckStmt->execute([':email' => $email, ':full_name' => $fullName]);
+        // Kiểm tra lại email lần cuối trước khi ghi vào CSDL, phòng trường hợp có người khác
+        // vừa đăng ký trùng email trong lúc mình đang nhập mã OTP
+        $recheckStmt = $db->prepare("SELECT email FROM users WHERE email = :email");
+        $recheckStmt->execute([':email' => $email]);
         $conflict = $recheckStmt->fetch();
         if ($conflict) {
             unset($_SESSION['register_temp']);
             http_response_code(409);
-            $conflictMsg = ($conflict['email'] === $email)
-                ? "Email này vừa được đăng ký bởi người khác. Vui lòng thử lại với email khác!"
-                : "Tên người dùng \"$fullName\" vừa được người khác đăng ký. Vui lòng đổi họ tên khác!";
-            echo json_encode(["status" => "error", "message" => $conflictMsg], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Email này vừa được đăng ký bởi người khác. Vui lòng thử lại với email khác!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
@@ -140,9 +128,9 @@ switch ($action) {
                 ':avatar' => $avatar
             ]);
         } catch (PDOException $e) {
-            // Bắt lỗi UNIQUE constraint (mã 23000) nếu email vẫn lọt qua được 2 lớp kiểm tra trên
+            // Bắt lỗi UNIQUE constraint nếu email vẫn lọt qua được 2 lớp kiểm tra trên
             http_response_code(409);
-            echo json_encode(["status" => "error", "message" => "Email hoặc tên người dùng này đã tồn tại trong hệ thống!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Email này đã tồn tại trong hệ thống!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
