@@ -1,4 +1,6 @@
 <?php
+set_time_limit(120); 
+ini_set('max_execution_time', '120');
 // API kết nối Google Gemini AI tự động sinh lịch trình du lịch
 
 header("Content-Type: application/json; charset=UTF-8");
@@ -72,7 +74,7 @@ $listUrl = "https://generativelanguage.googleapis.com/v1beta/models?key=" . urle
 $ch = curl_init($listUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $listResponse = curl_exec($ch);
 $listHttp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -121,7 +123,7 @@ foreach ($availableModels as $modelPath) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
-    curl_setopt($ch, CURLOPT_TIMEOUT, 25);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
     $response = curl_exec($ch);

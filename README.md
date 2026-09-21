@@ -111,4 +111,4 @@ define('SMTP_APP_PASSWORD', 'your_16_char_app_password');
 Lấy key tại: https://aistudio.google.com/app/apikey
 define('GEMINI_API_KEY', 'your_gemini_api_key');
 
-## 6. Giải Thích
+

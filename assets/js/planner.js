@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const people = parseInt(document.getElementById("planPeople").value) || 2;
       const budget =
         parseInt(document.getElementById("planBudget").value) || 2500000;
-      const style = document.getElementById("planStyle").value || "chill";
+      const style = document.getElementById("planStyle") ? document.getElementById("planStyle").value : "chill";
       const vehicle = document.getElementById("planVehicle").value || "xe máy";
 
       const destObj = await resolveDestinationObject(destId);
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           "🤖 Gemini AI đang khởi tạo lịch trình...";
       if (loadingDesc)
         loadingDesc.innerText =
-          "Vui lòng chờ trong giây lát...";
+          "Vui lòng chờ trong giây lát (có thể mất 15-30 giây)...";
 
       try {
         const payload = {
@@ -111,16 +111,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           vehicle: vehicle,
         };
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 60000);
-
         const res = await fetch("api/ai_planner.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
+          body: JSON.stringify(payload)
         });
-        clearTimeout(timeoutId);
 
         if (res.ok) {
           const resData = await res.json();
@@ -296,52 +291,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  document.getElementById("btnSaveTrip").addEventListener("click", async () => {
-    if (!currentGeneratedTrip) return;
+  const btnSaveTrip = document.getElementById("btnSaveTrip");
+  if (btnSaveTrip) {
+    btnSaveTrip.addEventListener("click", async () => {
+      if (!currentGeneratedTrip) return;
 
-    const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
-    if (!user) {
-      showToast("Vui lòng đăng nhập để lưu chuyến đi!", "error");
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1200);
-      return;
-    }
-
-    let savedToServer = false;
-    try {
-      const res = await fetch("api/trips.php?action=create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentGeneratedTrip),
-      });
-      if (res.ok) {
-        const resData = await res.json();
-        if (resData.status === "success") savedToServer = true;
+      const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
+      if (!user) {
+        showToast("Vui lòng đăng nhập để lưu chuyến đi!", "error");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1200);
+        return;
       }
-    } catch (e) {}
 
-    const key = `my_trip_planner_trips_${user.email || user.id}`;
-    let myTrips = [];
-    try {
-      myTrips = JSON.parse(localStorage.getItem(key)) || [];
-    } catch {
-      myTrips = [];
-    }
-    myTrips.unshift(currentGeneratedTrip);
-    localStorage.setItem(key, JSON.stringify(myTrips));
+      let savedToServer = false;
+      try {
+        const res = await fetch("api/trips.php?action=create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(currentGeneratedTrip),
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.status === "success") savedToServer = true;
+        }
+      } catch (e) {}
 
-    if (savedToServer) {
-      showToast("Đã lưu chuyến đi thành công!", "success");
-    } else {
-      showToast(
-        "Đã lưu chuyến đi vào bộ nhớ tạm!",
-        "info",
-      );
-    }
+      const key = `my_trip_planner_trips_${user.email || user.id}`;
+      let myTrips = [];
+      try {
+        myTrips = JSON.parse(localStorage.getItem(key)) || [];
+      } catch {
+        myTrips = [];
+      }
+      myTrips.unshift(currentGeneratedTrip);
+      localStorage.setItem(key, JSON.stringify(myTrips));
 
-    setTimeout(() => {
-      window.location.href = "itinerary.html";
-    }, 800);
-  });
+      if (savedToServer) {
+        showToast("Đã lưu chuyến đi thành công!", "success");
+      } else {
+        showToast(
+          "Đã lưu chuyến đi vào bộ nhớ tạm!",
+          "info",
+        );
+      }
+
+      setTimeout(() => {
+        window.location.href = "itinerary.html";
+      }, 800);
+    });
+  }
 });
