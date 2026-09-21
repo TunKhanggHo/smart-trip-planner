@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();
   initMobileNav();
@@ -6,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroSearch();
 });
 
-/* --- 1. STICKY HEADER EFFECT --- */
 function initHeaderScroll() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -20,7 +18,6 @@ function initHeaderScroll() {
   });
 }
 
-/* --- 2. MOBILE NAVIGATION TOGGLE --- */
 function initMobileNav() {
   const toggleBtn = document.querySelector('.mobile-toggle');
   const navLinks = document.querySelector('.nav-links');
@@ -33,7 +30,6 @@ function initMobileNav() {
     toggleBtn.innerHTML = isOpen ? '✕' : '☰';
   });
 
-  // Close menu when clicking outside
   document.addEventListener('click', (e) => {
     if (!navLinks.contains(e.target) && !toggleBtn.contains(e.target) && navLinks.classList.contains('active')) {
       navLinks.classList.remove('active');
@@ -42,7 +38,6 @@ function initMobileNav() {
   });
 }
 
-/* --- 3. AUTH STATE MANAGEMENT (LOCALSTORAGE) --- */
 const Auth = {
   getUser: () => {
     try {
@@ -63,7 +58,7 @@ const Auth = {
       await fetch('api/auth.php?action=logout', { method: 'POST' });
     } catch (e) {}
     localStorage.removeItem('trip_planner_user');
-    showToast('Đã đăng xuất thành công!', 'info');
+    showToast('Đã đăng xuất!', 'info');
     setTimeout(() => {
       window.location.reload();
     }, 500);
@@ -74,40 +69,25 @@ const Auth = {
   }
 };
 
-/**
- * Dùng cho các trang PRIVATE (bắt buộc đăng nhập mới xem được, ví dụ itinerary.html).
- * Kiểm tra session thật với server trước (đáng tin cậy nhất), nếu server không phản hồi
- * mới rớt xuống kiểm tra localStorage tạm thời. Nếu cả 2 đều không có -> đá về login.html.
- * Cách dùng: đặt `if (!(await requireLogin())) return;` ở đầu DOMContentLoaded.
- */
 async function requireLogin(redirectTo = 'login.html') {
   try {
     const res = await fetch('api/auth.php?action=me');
     if (res.ok) {
       const data = await res.json();
       if (data.isLoggedIn) return true;
-      // Server xác nhận rõ ràng là CHƯA đăng nhập -> chặn luôn, không cần rớt xuống local nữa
-      showToast('Vui lòng đăng nhập để truy cập trang này!', 'error');
+      showToast('Vui lòng đăng nhập trước!', 'error');
       setTimeout(() => { window.location.href = redirectTo; }, 900);
       return false;
     }
   } catch (e) {}
 
-  // Server không phản hồi được (mất mạng/DB lỗi) -> tạm chấp nhận session lưu cục bộ
   if (Auth.isLoggedIn()) return true;
 
-  showToast('Vui lòng đăng nhập để truy cập trang này!', 'error');
+  showToast('Vui lòng đăng nhập trước!', 'error');
   setTimeout(() => { window.location.href = redirectTo; }, 900);
   return false;
 }
 
-/**
- * Dùng riêng cho trang admin.html. Kiểm tra CHẶT hơn requireLogin():
- * phải vừa đăng nhập, vừa có role = admin, mới được vào.
- * Vì đây là trang có dữ liệu nhạy cảm (quản lý user, xóa dữ liệu...), nếu server
- * không phản hồi được thì CHẶN LUÔN chứ không rớt xuống localStorage như requireLogin()
- * (localStorage dễ bị người dùng tự sửa tay để giả làm admin).
- */
 async function requireAdminPage(redirectTo = 'index.html') {
   try {
     const res = await fetch('api/auth.php?action=me');
@@ -117,7 +97,7 @@ async function requireAdminPage(redirectTo = 'index.html') {
     }
   } catch (e) {}
 
-  showToast('Bạn không có quyền truy cập trang này!', 'error');
+  showToast('Bạn không có quyền vào trang này!', 'error');
   setTimeout(() => { window.location.href = redirectTo; }, 900);
   return false;
 }
@@ -128,7 +108,6 @@ function checkAuthState() {
   if (!navActions) return;
 
   if (user) {
-    // Render logged in UI
     const isAdmin = user.role === 'admin';
     navActions.innerHTML = `
       ${isAdmin ? `<a href="admin.html" class="btn btn-outline btn-sm" style="border-color: var(--accent); color: var(--accent);" title="Trang Quản Trị">🛠️ Quản Trị</a>` : ''}
@@ -139,7 +118,6 @@ function checkAuthState() {
       <button class="btn btn-outline btn-sm" onclick="Auth.logout()">Đăng xuất</button>
     `;
   } else {
-    // Render guest UI
     navActions.innerHTML = `
       <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
       <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
@@ -147,7 +125,6 @@ function checkAuthState() {
   }
 }
 
-/* --- 4. TOAST NOTIFICATION UTILITY --- */
 function showToast(message, type = 'info', duration = 3000) {
   let container = document.querySelector('.toast-container');
   if (!container) {
@@ -178,23 +155,16 @@ function showToast(message, type = 'info', duration = 3000) {
   }, duration);
 }
 
-/* --- 5. FORMAT UTILITIES --- */
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 }
 
-/**
- * Chống XSS: dùng hàm này bọc quanh MỌI nội dung do người dùng tự nhập
- * (tên chuyến đi, khoản chi tiêu, checklist, đánh giá, hoạt động tùy chỉnh...)
- * trước khi chèn vào trang bằng innerHTML/template string.
- */
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.innerText = (str === null || str === undefined) ? '' : str;
   return div.innerHTML;
 }
 
-/* --- 6. HERO SEARCH BAR HANDLER --- */
 function initHeroSearch() {
   const searchForm = document.getElementById('heroSearchForm');
   if (!searchForm) return;
@@ -219,7 +189,6 @@ function initHeroSearch() {
   });
 }
 
-// Make helper functions globally accessible
 window.showToast = showToast;
 window.formatVND = formatVND;
 window.escapeHtml = escapeHtml;

@@ -1,9 +1,5 @@
 <?php
-/**
- * API Quản lý người dùng cho Trang Quản Trị (chỉ Admin được dùng):
- * 1. Lấy danh sách toàn bộ user.
- * 2. Khóa (ban) / Mở khóa (unban) tài khoản vi phạm.
- */
+// API quản lý tài khoản người dùng và khóa/mở tài khoản cho Admin
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -13,7 +9,7 @@ require_once "../config/auth_helper.php";
 $database = new Database();
 $db = $database->getConnection();
 
-requireAdmin(); // Chặn ngay nếu không phải Admin
+requireAdmin();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $data = json_decode(file_get_contents("php://input"), true) ?: $_POST;
@@ -34,10 +30,9 @@ switch ($action) {
             exit();
         }
 
-        // Không cho Admin tự khóa chính mình (tránh tự khóa mất quyền truy cập)
         if ($targetId === (int)$_SESSION['user_id']) {
             http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Không thể tự khóa chính tài khoản của bạn!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Không thể tự khóa tài khoản của chính mình!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
@@ -47,12 +42,12 @@ switch ($action) {
 
         echo json_encode([
             "status" => "success",
-            "message" => $action === 'ban' ? "Đã khóa tài khoản!" : "Đã mở khóa tài khoản!"
+            "message" => $action === 'ban' ? "Đã khóa tài khoản thành công!" : "Đã mở khóa tài khoản!"
         ], JSON_UNESCAPED_UNICODE);
         break;
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Hành động không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Yêu cầu không hợp lệ!"], JSON_UNESCAPED_UNICODE);
         break;
 }

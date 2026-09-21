@@ -1,18 +1,15 @@
 <?php
+// Class hỗ trợ gửi Email OTP qua Google SMTP Socket (SSL 465)
 
 require_once __DIR__ . '/secrets.php';
 
 class Mailer {
-    // Cấu hình Google SMTP Server
     private static $smtpHost = 'smtp.gmail.com';
-    private static $smtpPort = 465; // SSL port bảo mật
-    private static $smtpUser = SMTP_EMAIL; // Lấy từ config/secrets.php (không commit lên Git)
-    private static $smtpPass = SMTP_APP_PASSWORD; // Lấy từ config/secrets.php (không commit lên Git)
+    private static $smtpPort = 465;
+    private static $smtpUser = SMTP_EMAIL;
+    private static $smtpPass = SMTP_APP_PASSWORD;
     private static $fromName = 'Smart Trip Planner Security';
 
-    /**
-     * Cập nhật thông tin tài khoản gửi nếu cần
-     */
     public static function setSender($email, $appPassword = null) {
         self::$smtpUser = $email;
         if ($appPassword) {
@@ -20,9 +17,6 @@ class Mailer {
         }
     }
 
-    /**
-     * Gửi Email OTP với mẫu giao diện HTML chuyên nghiệp
-     */
     public static function sendOtpEmail($toEmail, $otpCode, $fullName = 'Quý khách', $type = 'register') {
         $subject = ($type === 'register') 
             ? '🔐 [Smart Trip Planner] Mã xác thực OTP đăng ký tài khoản'
@@ -84,9 +78,6 @@ class Mailer {
         return self::sendSmtpMail($toEmail, $subject, $htmlBody);
     }
 
-    /**
-     * Giao thức socket SMTP chuẩn Google qua SSL Port 465
-     */
     private static function sendSmtpMail($toEmail, $subject, $htmlBody) {
         $timeout = 15;
         $socket = @stream_socket_client("ssl://" . self::$smtpHost . ":" . self::$smtpPort, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT);
@@ -109,7 +100,7 @@ class Mailer {
             fputs($socket, $cmd . "\r\n");
         };
 
-        $read(); // Đọc chào ban đầu (220)
+        $read();
 
         $send("EHLO " . gethostname());
         $read();

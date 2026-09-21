@@ -24,7 +24,6 @@
 
 ## 🗂️ 2. CẤU TRÚC THƯ MỤC DỰ ÁN
 
-```text
 smart-trip-planner/
 ├── api/                             # Backend PHP - xử lý logic & truy vấn MySQL (PDO)
 │   ├── auth.php                     # Đăng nhập / Đăng ký (OTP email) / Quên mật khẩu / Session / Cập nhật hồ sơ
@@ -101,7 +100,7 @@ smart-trip-planner/
 4. **Đầy đủ tính năng thực tế:** Sổ quản lý chi tiêu (Expense Tracker) + Checklist hành lý có thanh tiến độ `%` + Hệ thống Đánh giá Review + Gợi ý lịch trình bằng AI (Google Gemini).
 5. **Phân quyền & Bảo mật:** Phân quyền Public/Private theo trang (khách xem tự do, phải đăng nhập mới vào được "Lịch trình của tôi") và phân quyền theo vai trò Admin/User qua PHP Session (không phải chỉ ẩn nút ở giao diện). Chống XSS khi hiển thị nội dung người dùng nhập, chống thao túng dữ liệu người khác (kiểm tra quyền sở hữu ở mọi API sửa/xóa).
 
-## 5. Dữ liệu
+## 5. Dữ liệu API KEY
 ** Thông tin gửi mail OTP qua Gmail SMTP **
 Hướng dẫn lấy App Password: https://myaccount.google.com/apppasswords
 define('SMTP_EMAIL', 'your_email@gmail.com');
@@ -110,3 +109,5 @@ define('SMTP_APP_PASSWORD', 'your_16_char_app_password');
 ** API Key Google Gemini AI **
 Lấy key tại: https://aistudio.google.com/app/apikey
 define('GEMINI_API_KEY', 'your_gemini_api_key');
+
+## 6. Giải Thích

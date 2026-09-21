@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (dest) return dest;
     }
 
-    // Tên hiển thị từ select option
     const selectedOption = destSelect
       ? destSelect.options[destSelect.selectedIndex]
       : null;
@@ -69,14 +68,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
-  // Chặn hành vi submit mặc định của form (reload trang) phòng khi người dùng
-  // lỡ nhấn Enter trong 1 ô nhập nào đó. Việc tạo lịch trình giờ chỉ chạy qua
-  // nút "🤖 Tạo Bằng Trí Tuệ Nhân Tạo AI" bên dưới (không còn nút Thuật Toán riêng nữa).
   form.addEventListener("submit", (e) => {
     e.preventDefault();
   });
 
-  // CHẾ ĐỘ TRÍ TUỆ NHÂN TẠO AI (GEMINI AI)
   if (btnAI) {
     btnAI.addEventListener("click", async () => {
       const destId = destSelect.value;
@@ -98,10 +93,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const loadingDesc = loading.querySelector("p");
       if (loadingTitle)
         loadingTitle.innerText =
-          "🤖 Trí tuệ nhân tạo Gemini AI đang sáng tạo lịch trình...";
+          "🤖 Gemini AI đang khởi tạo lịch trình...";
       if (loadingDesc)
         loadingDesc.innerText =
-          "Có thể mất tới 30-40 giây, vui lòng không tắt trang trong lúc chờ...";
+          "Vui lòng chờ trong giây lát...";
 
       try {
         const payload = {
@@ -117,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 giây timeout — backend thử lần lượt nhiều model nên cần thời gian rộng rãi hơn
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
 
         const res = await fetch("api/ai_planner.php", {
           method: "POST",
@@ -179,29 +174,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             resultArea.style.display = "block";
             renderGeneratedResult();
             showToast(
-              "✨ Lịch trình được sáng tạo thành công bởi Google Gemini AI!",
+              "Tạo lịch trình bằng AI thành công!",
               "success",
             );
             return;
           }
         }
       } catch (err) {
-        console.log("Lỗi khi gọi Gemini AI:", err);
+        console.log("Lỗi AI:", err);
       }
 
-      // AI thất bại (mất mạng, hết quota, timeout...) -> báo lỗi rõ ràng,
-      // KHÔNG còn tạo lịch trình giả bằng thuật toán nữa.
       loading.style.display = "none";
       emptyState.style.display = "block";
       resultArea.style.display = "none";
       showToast(
-        "❌ Không thể tạo lịch trình bằng AI lúc này. Vui lòng kiểm tra kết nối mạng và thử lại!",
+        "Không thể kết nối với AI. Vui lòng thử lại!",
         "error",
       );
     });
   }
 
-  // RENDER GIAO DIỆN LỊCH TRÌNH RA MÀN HÌNH
   function renderGeneratedResult() {
     if (!currentGeneratedTrip || !currentGeneratedTrip.schedule) return;
 
@@ -215,12 +207,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const budgetStatus = document.getElementById("resBudgetStatus");
     const isAI = currentGeneratedTrip.generatedBy === "gemini_ai";
     const badgeAI = isAI
-      ? `<span class="badge" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white; margin-left: 0.5rem; font-size: 0.8rem;">🤖 Sáng tạo bởi Google Gemini AI</span>`
+      ? `<span class="badge" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white; margin-left: 0.5rem; font-size: 0.8rem;">🤖 Tạo bởi Gemini AI</span>`
       : "";
 
     if (budgetStatus) {
       if (totalPerPerson <= userBudget) {
-        budgetStatus.innerHTML = `✅ Ngân sách tối ưu tuyệt vời! ${badgeAI}`;
+        budgetStatus.innerHTML = `✅ Ngân sách phù hợp! ${badgeAI}`;
         budgetStatus.style.color = "var(--secondary)";
       } else {
         budgetStatus.innerHTML = `⚠️ Vượt ngân sách khoảng ${formatVND(totalPerPerson - userBudget)} ${badgeAI}`;
@@ -250,7 +242,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="schedule-title" style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;">${escapeHtml(act.title)}</div>
                 <div class="schedule-cost" style="font-size: 0.85rem; color: var(--accent); font-weight: 700; margin-top: 0.2rem;">${formatVND(act.cost)}</div>
               </div>
-              <button class="btn btn-outline btn-sm" style="padding: 0.2rem 0.5rem; color: var(--danger); border-color: #fecaca;" onclick="removeActivity(${day.dayNumber}, '${act.id}')" title="Xóa hoạt động">✕</button>
+              <button class="btn btn-outline btn-sm" style="padding: 0.2rem 0.5rem; color: var(--danger); border-color: #fecaca;" onclick="removeActivity(${day.dayNumber}, '${act.id}')" title="Xóa">✕</button>
             </div>
           `,
             )
@@ -281,9 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   window.promptAddActivity = (dayNum) => {
-    const title = prompt(`Nhập tên hoạt động muốn thêm vào Ngày ${dayNum}:`);
+    const title = prompt(`Nhập tên hoạt động thêm vào Ngày ${dayNum}:`);
     if (!title) return;
-    const costStr = prompt("Nhập chi phí dự tính (VNĐ):", "100000");
+    const costStr = prompt("Chi phí dự tính (VNĐ):", "100000");
     const cost = parseInt(costStr) || 0;
 
     const day = currentGeneratedTrip.schedule.find(
@@ -300,11 +292,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentGeneratedTrip.totalCostPerPerson =
         currentGeneratedTrip.schedule.reduce((sum, d) => sum + d.dayTotal, 0);
       renderGeneratedResult();
-      showToast("Đã thêm hoạt động mới!", "success");
+      showToast("Đã thêm hoạt động!", "success");
     }
   };
 
-  // Lưu vào MySQL qua PHP API
   document.getElementById("btnSaveTrip").addEventListener("click", async () => {
     if (!currentGeneratedTrip) return;
 
@@ -341,10 +332,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     localStorage.setItem(key, JSON.stringify(myTrips));
 
     if (savedToServer) {
-      showToast("Đã lưu chuyến đi vào CSDL MySQL!", "success");
+      showToast("Đã lưu chuyến đi thành công!", "success");
     } else {
       showToast(
-        "Đã lưu chuyến đi (chế độ tạm thời, backend không phản hồi)!",
+        "Đã lưu chuyến đi vào bộ nhớ tạm!",
         "info",
       );
     }

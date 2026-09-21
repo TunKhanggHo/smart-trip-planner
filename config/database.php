@@ -1,8 +1,5 @@
 <?php
-/**
- * Kết nối Cơ sở dữ liệu MySQL bằng PDO (PHP Data Objects)
- * Hỗ trợ chống SQL Injection và bảo mật cao
- */
+// Lớp kết nối CSDL MySQL bằng PDO
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -12,7 +9,7 @@ class Database {
     private $host = "localhost";
     private $db_name = "smart_trip_db";
     private $username = "root";
-    private $password = ""; // Mặc định trên XAMPP mật khẩu là rỗng
+    private $password = "";
     public $conn;
 
     public function getConnection() {

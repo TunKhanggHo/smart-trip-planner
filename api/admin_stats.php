@@ -1,7 +1,5 @@
 <?php
-/**
- * API Thống kê tổng quan cho Trang Quản Trị (chỉ Admin được xem).
- */
+// API lấy dữ liệu thống kê cho Dashboard Admin
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -11,7 +9,7 @@ require_once "../config/auth_helper.php";
 $database = new Database();
 $db = $database->getConnection();
 
-requireAdmin(); // Chặn ngay nếu không phải Admin
+requireAdmin();
 
 $stats = [];
 
@@ -20,7 +18,6 @@ $stats['totalDestinations'] = (int)$db->query("SELECT COUNT(*) FROM destinations
 $stats['totalTrips'] = (int)$db->query("SELECT COUNT(*) FROM trips")->fetchColumn();
 $stats['totalReviews'] = (int)$db->query("SELECT COUNT(*) FROM reviews")->fetchColumn();
 
-// Top 5 điểm đến có rating cao nhất (kèm số lượng review thực tế đã đăng)
 $topStmt = $db->query("
     SELECT d.id, d.name, d.city, d.rating,
            (SELECT COUNT(*) FROM reviews r WHERE r.destination_id = d.id) AS real_review_count

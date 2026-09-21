@@ -1,11 +1,5 @@
 <?php
-/**
- * API Checklist Hành Lý Chuẩn Bị:
- * 1. Lấy danh sách đồ dùng theo nhóm.
- * 2. Đánh dấu đã chuẩn bị / chưa (Toggle check).
- * 3. Thêm món đồ mới.
- * 4. Xóa món đồ.
- */
+// API quản lý Checklist hành lý cá nhân
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -20,7 +14,7 @@ $data = json_decode(file_get_contents("php://input"), true) ?: $_POST;
 
 if (!$userId) {
     http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "Bạn cần đăng nhập để dùng checklist hành lý!"], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập!"], JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -30,7 +24,6 @@ switch ($action) {
         $stmt->execute([':user_id' => $userId]);
         $items = $stmt->fetchAll();
 
-        // Nếu người dùng này chưa có checklist nào, khởi tạo danh sách mặc định riêng cho họ
         if (empty($items)) {
             $defaultItems = [
                 ['chk_' . $userId . '_1', 'Giấy tờ tùy thân', 'CCCD / Hộ chiếu bản gốc', 1],
@@ -49,7 +42,6 @@ switch ($action) {
             $items = $stmt->fetchAll();
         }
 
-        // Định dạng chuẩn cho Frontend JS
         $formatted = array_map(function($item) {
             return [
                 'id' => $item['id'],
@@ -67,7 +59,7 @@ switch ($action) {
         if ($id) {
             $stmt = $db->prepare("UPDATE trip_checklists SET is_checked = NOT is_checked WHERE id = :id AND user_id = :user_id");
             $stmt->execute([':id' => $id, ':user_id' => $userId]);
-            echo json_encode(["status" => "success", "message" => "Đã cập nhật trạng thái!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "success", "message" => "Cập nhật thành công!"], JSON_UNESCAPED_UNICODE);
         }
         break;
 
@@ -79,7 +71,7 @@ switch ($action) {
         if (!empty($name)) {
             $stmt = $db->prepare("INSERT INTO trip_checklists (id, user_id, category, name, is_checked) VALUES (:id, :user_id, :category, :name, 0)");
             $stmt->execute([':id' => $id, ':user_id' => $userId, ':category' => $category, ':name' => $name]);
-            echo json_encode(["status" => "success", "message" => "Đã thêm món đồ!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "success", "message" => "Thêm món đồ thành công!"], JSON_UNESCAPED_UNICODE);
         }
         break;
 
@@ -94,6 +86,6 @@ switch ($action) {
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Hành động không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Yêu cầu không hợp lệ!"], JSON_UNESCAPED_UNICODE);
         break;
 }

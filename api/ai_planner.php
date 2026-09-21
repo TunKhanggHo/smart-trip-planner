@@ -1,7 +1,5 @@
 <?php
-/**
- * Tự động tìm model tương thích nhất và sinh lịch trình dạng JSON chuẩn 100%.
- */
+// API kết nối Google Gemini AI tự động sinh lịch trình du lịch
 
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
@@ -70,7 +68,6 @@ CẤU TRÚC JSON MẪU:
   ]
 }";
 
-// 1. Tự động lấy danh sách Model tương thích từ tài khoản Google
 $listUrl = "https://generativelanguage.googleapis.com/v1beta/models?key=" . urlencode($GEMINI_API_KEY);
 $ch = curl_init($listUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -114,7 +111,7 @@ $postData = [
     ]
 ];
 
-$lastAttempts = []; // Lưu lại chi tiết từng lần gọi thất bại để debug
+$lastAttempts = [];
 
 foreach ($availableModels as $modelPath) {
     $generateUrl = "https://generativelanguage.googleapis.com/v1beta/" . $modelPath . ":generateContent?key=" . urlencode($GEMINI_API_KEY);
@@ -144,7 +141,7 @@ foreach ($availableModels as $modelPath) {
                     "status" => "success",
                     "source" => "gemini_ai",
                     "model_used" => $modelPath,
-                    "message" => "Lịch trình được tạo thành công bởi Trí Tuệ Nhân Tạo Google Gemini AI!",
+                    "message" => "Tạo lịch trình thành công từ Google Gemini AI!",
                     "data" => $scheduleData
                 ], JSON_UNESCAPED_UNICODE);
                 exit();
@@ -152,7 +149,6 @@ foreach ($availableModels as $modelPath) {
         }
     }
 
-    // Ghi lại chi tiết lần gọi thất bại này (giới hạn 300 ký tự để không quá dài)
     $lastAttempts[] = [
         "model" => $modelPath,
         "http_code" => $httpCode,
@@ -161,11 +157,10 @@ foreach ($availableModels as $modelPath) {
     ];
 }
 
-// Nếu không gọi được
 http_response_code(500);
 echo json_encode([
     "status" => "error",
-    "message" => "Lỗi gọi Gemini AI. Vui lòng kiểm tra lại kết nối mạng.",
+    "message" => "Không thể kết nối đến Gemini AI. Vui lòng kiểm tra lại mạng!",
     "available_models" => $availableModels,
     "debug_attempts" => $lastAttempts,
     "models_list_http_code" => $listHttp,

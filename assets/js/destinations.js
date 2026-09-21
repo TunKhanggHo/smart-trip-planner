@@ -8,13 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const noResults = document.getElementById("noResults");
   const resultCountBadge = document.getElementById("resultCountBadge");
 
-  // Đọc tham số URL
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has("search")) searchInput.value = urlParams.get("search");
   if (urlParams.has("budget")) budgetFilter.value = urlParams.get("budget");
   if (urlParams.has("category")) currentCategory = urlParams.get("category");
 
-  // Render danh sách nút phân loại danh mục
   const categories = TripDataService.getCategories();
   catTabsContainer.innerHTML = categories
     .map(
@@ -26,16 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
     )
     .join("");
 
-  // Hàm render danh sách điểm đến bất đồng bộ từ MySQL / PHP API
   async function render() {
     const search = searchInput.value.trim();
     const budget = budgetFilter.value ? parseInt(budgetFilter.value) : null;
     const sort = sortFilter.value;
 
     if (resultCountBadge)
-      resultCountBadge.innerText = "Đang tải dữ liệu từ CSDL...";
+      resultCountBadge.innerText = "Đang tải dữ liệu...";
 
-    // Đã tự động kéo dữ liệu tươi nhất từ MySQL thông qua TripDataService đã nâng cấp
     const results = await TripDataService.filterDestinations(
       currentCategory,
       search,
@@ -91,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .join("");
   }
 
-  // Xử lý nút Thả tim
   window.toggleDestinationFav = async (e, destId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -102,12 +97,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast(
       isNowFav
         ? "Đã lưu vào danh sách yêu thích!"
-        : "Đã xóa khỏi danh sách yêu thích!",
+        : "Đã xóa khỏi yêu thích!",
       "info",
     );
   };
 
-  // Lắng nghe sự kiện người dùng
   catTabsContainer.addEventListener("click", (e) => {
     const btn = e.target.closest(".cat-tab-btn");
     if (!btn) return;
@@ -137,9 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(".cat-tab-btn")
       .forEach((b) => b.classList.toggle("active", b.dataset.cat === "all"));
     render();
-    showToast("Đã đặt lại toàn bộ bộ lọc!", "info");
+    showToast("Đã đặt lại bộ lọc!", "info");
   });
 
-  // Render lần đầu khi mở trang
   render();
 });

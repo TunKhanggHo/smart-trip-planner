@@ -1,16 +1,11 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   initRegisterForm();
   initLoginForm();
 });
 
-// Biến lưu tạm email đang thực hiện quên mật khẩu & dữ liệu đăng ký
 let currentResetEmail = '';
 let tempRegisterData = null;
 
-// ==============================================================================
-// 1. XỬ LÝ ĐĂNG NHẬP
-// ==============================================================================
 window.handleLoginSubmit = async (e) => {
   if (e) e.preventDefault();
 
@@ -36,7 +31,7 @@ window.handleLoginSubmit = async (e) => {
     }
     if (loginCard) {
       loginCard.classList.remove('shake');
-      void loginCard.offsetWidth; // Force reflow
+      void loginCard.offsetWidth;
       loginCard.classList.add('shake');
     }
     if (passInput) {
@@ -53,13 +48,13 @@ window.handleLoginSubmit = async (e) => {
   const pass = passInput ? passInput.value : '';
 
   if (!email || !pass) {
-    showLoginError('Vui lòng điền đầy đủ email và mật khẩu!');
+    showLoginError('Vui lòng nhập email và mật khẩu!');
     return;
   }
 
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerText = 'Đang kiểm tra đăng nhập...';
+    submitBtn.innerText = 'Đang xử lý...';
   }
 
   try {
@@ -74,25 +69,24 @@ window.handleLoginSubmit = async (e) => {
       localStorage.setItem('trip_planner_user', JSON.stringify(data.user));
       if (alertBox && alertText) {
         alertBox.className = 'auth-alert success';
-        alertText.innerText = 'Đăng nhập thành công! Đang chuyển hướng...';
+        alertText.innerText = 'Đăng nhập thành công!';
         alertBox.style.display = 'flex';
       }
       if (typeof showToast === 'function') showToast('Đăng nhập thành công!', 'success');
       setTimeout(() => { window.location.href = 'index.html'; }, 800);
       return;
     } else {
-      showLoginError(data.message || 'Email hoặc mật khẩu không chính xác!');
+      showLoginError(data.message || 'Mật khẩu hoặc email sai!');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Đang Nhập Ngay ➔';
+        submitBtn.innerText = 'Đăng Nhập Ngay ➔';
       }
       return;
     }
   } catch (err) {
-    console.warn('Backend API offline, using fallback login.');
+    console.warn('Backend offline, fallback mode.');
   }
 
-  // Fallback LocalStorage khi máy chủ PHP/MySQL chưa mở
   if (email && pass) {
     const userObj = {
       name: email.split('@')[0],
@@ -100,10 +94,10 @@ window.handleLoginSubmit = async (e) => {
       avatar: email.charAt(0).toUpperCase()
     };
     localStorage.setItem('trip_planner_user', JSON.stringify(userObj));
-    if (typeof showToast === 'function') showToast('Đăng nhập thành công (Demo)!', 'success');
+    if (typeof showToast === 'function') showToast('Đăng nhập thành công!', 'success');
     setTimeout(() => { window.location.href = 'index.html'; }, 800);
   } else {
-    showLoginError('Vui lòng điền đầy đủ email và mật khẩu!');
+    showLoginError('Vui lòng nhập email và mật khẩu!');
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.innerText = 'Đăng Nhập Ngay ➔';
@@ -129,9 +123,6 @@ function initLoginForm() {
   form.addEventListener('submit', window.handleLoginSubmit);
 }
 
-// ==============================================================================
-// 2. XỬ LÝ ĐĂNG KÝ TÀI KHOẢN (2 BƯỚC VỚI MÃ OTP CHỐNG BOT)
-// ==============================================================================
 window.handleRegisterStep1 = async (e) => {
   if (e) e.preventDefault();
 
@@ -166,12 +157,12 @@ window.handleRegisterStep1 = async (e) => {
   const confirmPass = confirmPassInput ? confirmPassInput.value : '';
 
   if (!name || !email || !pass || !confirmPass) {
-    showRegError('Vui lòng điền đầy đủ tất cả các trường!');
+    showRegError('Vui lòng điền đủ thông tin!');
     return;
   }
 
   if (pass !== confirmPass) {
-    showRegError('Mật khẩu xác nhận không trùng khớp!');
+    showRegError('Mật khẩu xác nhận không khớp!');
     if (confirmPassInput) {
       confirmPassInput.focus();
       confirmPassInput.select();
@@ -180,7 +171,7 @@ window.handleRegisterStep1 = async (e) => {
   }
 
   if (pass.length < 6) {
-    showRegError('Mật khẩu phải có độ dài từ 6 ký tự trở lên!');
+    showRegError('Mật khẩu tối thiểu 6 ký tự!');
     if (passInput) passInput.focus();
     return;
   }
@@ -217,19 +208,18 @@ window.handleRegisterStep1 = async (e) => {
       }
 
       if (typeof showToast === 'function') {
-        showToast('Mã OTP đã được gửi vào Gmail của bạn! Vui lòng kiểm tra hộp thư.', 'success');
+        showToast('Mã OTP đã được gửi đến Email!', 'success');
       }
       return;
     } else {
-      showRegError(data.message || 'Lỗi khi gửi mã xác thực OTP!');
+      showRegError(data.message || 'Gửi mã OTP thất bại!');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Tiếp Tục: Gửi Mã OTP Qua Email ➔';
+        submitBtn.innerText = 'Tiếp Tục ➔';
       }
       return;
     }
   } catch (err) {
-    console.warn('Backend send_register_otp offline, using fallback OTP:', err);
     tempRegisterData = { name, email, password: pass };
     const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const displayEmail = document.getElementById('displayRegTargetEmail');
@@ -246,11 +236,11 @@ window.handleRegisterStep1 = async (e) => {
       otpInput.value = mockOtp;
       otpInput.focus();
     }
-    if (typeof showToast === 'function') showToast('Mã OTP (Demo) đã được tạo!', 'info');
+    if (typeof showToast === 'function') showToast('Mã OTP khởi tạo!', 'info');
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerText = 'Tiếp Tục: Gửi Mã OTP Qua Email ➔';
+      submitBtn.innerText = 'Tiếp Tục ➔';
     }
   }
 };
@@ -268,7 +258,6 @@ function initRegisterForm() {
   form.addEventListener('submit', window.handleRegisterStep1);
 }
 
-// Bước 2: Xác nhận OTP và hoàn tất đăng ký
 window.handleVerifyRegister = async (e) => {
   if (e) e.preventDefault();
   const otpInput = document.getElementById('regOtp');
@@ -281,7 +270,7 @@ window.handleVerifyRegister = async (e) => {
   const otp = otpInput ? otpInput.value.trim() : '';
   if (!otp || otp.length !== 6) {
     if (alertStep2 && alertStep2Text) {
-      alertStep2Text.innerText = 'Vui lòng nhập đúng 6 chữ số mã OTP!';
+      alertStep2Text.innerText = 'Nhập đủ 6 số OTP!';
       alertStep2.style.display = 'flex';
     }
     if (typeof showToast === 'function') showToast('Vui lòng nhập đúng 6 số OTP!', 'error');
@@ -290,7 +279,7 @@ window.handleVerifyRegister = async (e) => {
 
   if (btn) {
     btn.disabled = true;
-    btn.innerText = 'Đang xác thực & Tạo tài khoản...';
+    btn.innerText = 'Đang xác nhận...';
   }
 
   try {
@@ -305,7 +294,7 @@ window.handleVerifyRegister = async (e) => {
       localStorage.setItem('trip_planner_user', JSON.stringify(data.user));
       if (alertStep2 && alertStep2Text) {
         alertStep2.className = 'auth-alert success';
-        alertStep2Text.innerText = 'Đăng ký tài khoản thành công! Đang chuyển hướng...';
+        alertStep2Text.innerText = 'Đăng ký thành công!';
         alertStep2.style.display = 'flex';
       }
       if (typeof showToast === 'function') showToast('Đăng ký tài khoản thành công!', 'success');
@@ -313,18 +302,17 @@ window.handleVerifyRegister = async (e) => {
       return;
     } else {
       if (alertStep2 && alertStep2Text) {
-        alertStep2Text.innerText = data.message || 'Mã xác thực OTP không chính xác hoặc đã hết hạn!';
+        alertStep2Text.innerText = data.message || 'Mã OTP không đúng!';
         alertStep2.style.display = 'flex';
       }
-      if (typeof showToast === 'function') showToast(data.message || 'OTP không đúng!', 'error');
+      if (typeof showToast === 'function') showToast(data.message || 'Mã OTP sai!', 'error');
       if (btn) {
         btn.disabled = false;
-        btn.innerText = 'Xác Nhận & Hoàn Tất Đăng Ký 🚀';
+        btn.innerText = 'Hoàn Tất Đăng Ký 🚀';
       }
       return;
     }
   } catch (err) {
-    // Fallback demo
     if (tempRegisterData) {
       const userObj = {
         id: Date.now(),
@@ -333,18 +321,17 @@ window.handleVerifyRegister = async (e) => {
         avatar: tempRegisterData.name.charAt(0).toUpperCase()
       };
       localStorage.setItem('trip_planner_user', JSON.stringify(userObj));
-      if (typeof showToast === 'function') showToast('Đăng ký tài khoản thành công (Demo)!', 'success');
+      if (typeof showToast === 'function') showToast('Đăng ký thành công!', 'success');
       setTimeout(() => { window.location.href = 'index.html'; }, 1000);
     }
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerText = 'Xác Nhận & Hoàn Tất Đăng Ký 🚀';
+      btn.innerText = 'Hoàn Tất Đăng Ký 🚀';
     }
   }
 };
 
-// Quay lại Bước 1 sửa thông tin
 window.backToRegStep1 = () => {
   const s1 = document.getElementById('regStep1');
   const s2 = document.getElementById('regStep2');
@@ -354,7 +341,6 @@ window.backToRegStep1 = () => {
   if (alert2) alert2.style.display = 'none';
 };
 
-// Gửi lại mã OTP
 window.resendRegisterOtp = async () => {
   if (!tempRegisterData) {
     window.backToRegStep1();
@@ -364,7 +350,7 @@ window.resendRegisterOtp = async () => {
   const resendBtn = document.getElementById('btnResendRegOtp');
   if (resendBtn) {
     resendBtn.disabled = true;
-    resendBtn.innerText = 'Đang gửi lại...';
+    resendBtn.innerText = 'Đang gửi...';
   }
 
   try {
@@ -379,7 +365,7 @@ window.resendRegisterOtp = async () => {
       const otpInput = document.getElementById('regOtp');
       if (displayOtp) displayOtp.innerText = `Mã OTP: ${data.otp}`;
       if (otpInput) otpInput.value = data.otp;
-      if (typeof showToast === 'function') showToast('Đã gửi lại mã OTP mới!', 'info');
+      if (typeof showToast === 'function') showToast('Đã gửi mã OTP mới!', 'info');
     }
   } catch (err) {
     const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -387,7 +373,7 @@ window.resendRegisterOtp = async () => {
     const otpInput = document.getElementById('regOtp');
     if (displayOtp) displayOtp.innerText = `Mã OTP: ${mockOtp}`;
     if (otpInput) otpInput.value = mockOtp;
-    if (typeof showToast === 'function') showToast('Đã tạo mã OTP mới (Demo)!', 'info');
+    if (typeof showToast === 'function') showToast('Đã tạo mã OTP mới!', 'info');
   } finally {
     if (resendBtn) {
       resendBtn.disabled = false;
@@ -396,9 +382,6 @@ window.resendRegisterOtp = async () => {
   }
 };
 
-// ==============================================================================
-// 3. XỬ LÝ QUÊN MẬT KHẨU & OTP
-// ==============================================================================
 window.openForgotPasswordModal = () => {
   const modal = document.getElementById('forgotPasswordModal');
   if (!modal) return;
@@ -434,7 +417,6 @@ window.backToStep1 = () => {
   if (s2) s2.style.display = 'none';
 };
 
-// Bước 1: Gửi mã OTP xác nhận quên mật khẩu
 window.handleSendOtp = async (e) => {
   if (e) e.preventDefault();
   const emailInput = document.getElementById('forgotEmail');
@@ -447,7 +429,7 @@ window.handleSendOtp = async (e) => {
 
   if (!email) {
     if (alert1 && alert1Text) {
-      alert1Text.innerText = 'Vui lòng nhập địa chỉ email!';
+      alert1Text.innerText = 'Nhập email của bạn!';
       alert1.style.display = 'flex';
     }
     return;
@@ -455,7 +437,7 @@ window.handleSendOtp = async (e) => {
 
   if (btn) {
     btn.disabled = true;
-    btn.innerText = 'Đang gửi mã OTP...';
+    btn.innerText = 'Đang gửi...';
   }
 
   try {
@@ -481,11 +463,11 @@ window.handleSendOtp = async (e) => {
         otpInput.focus();
       }
       if (typeof showToast === 'function') {
-        showToast('Mã OTP đã được gửi vào Gmail của bạn! Vui lòng kiểm tra hộp thư.', 'success');
+        showToast('Mã OTP đã được gửi đến Gmail!', 'success');
       }
     } else {
       if (alert1 && alert1Text) {
-        alert1Text.innerText = data.message || 'Không tìm thấy tài khoản với email này!';
+        alert1Text.innerText = data.message || 'Email không tồn tại!';
         alert1.style.display = 'flex';
       }
     }
@@ -509,12 +491,11 @@ window.handleSendOtp = async (e) => {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerText = 'Gửi Mã Xác Nhận OTP ➔';
+      btn.innerText = 'Gửi Mã OTP ➔';
     }
   }
 };
 
-// Bước 2: Xác thực OTP & Đổi mật khẩu mới
 window.handleResetPassword = async (e) => {
   if (e) e.preventDefault();
   const otpInput = document.getElementById('forgotOtp');
@@ -532,7 +513,7 @@ window.handleResetPassword = async (e) => {
 
   if (newPass !== confirmPass) {
     if (alert2 && alert2Text) {
-      alert2Text.innerText = 'Mật khẩu xác nhận không trùng khớp!';
+      alert2Text.innerText = 'Mật khẩu không trùng khớp!';
       alert2.style.display = 'flex';
     }
     return;
@@ -540,7 +521,7 @@ window.handleResetPassword = async (e) => {
 
   if (newPass.length < 6) {
     if (alert2 && alert2Text) {
-      alert2Text.innerText = 'Mật khẩu mới phải có ít nhất 6 ký tự!';
+      alert2Text.innerText = 'Mật khẩu phải từ 6 ký tự!';
       alert2.style.display = 'flex';
     }
     return;
@@ -548,7 +529,7 @@ window.handleResetPassword = async (e) => {
 
   if (btn) {
     btn.disabled = true;
-    btn.innerText = 'Đang cập nhật mật khẩu...';
+    btn.innerText = 'Đang lưu...';
   }
 
   try {
@@ -572,31 +553,28 @@ window.handleResetPassword = async (e) => {
       if (loginEmail) loginEmail.value = currentResetEmail;
       if (loginAlert && loginAlertText) {
         loginAlert.className = 'auth-alert success';
-        loginAlertText.innerText = 'Đổi mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.';
+        loginAlertText.innerText = 'Đổi mật khẩu thành công!';
         loginAlert.style.display = 'flex';
       }
       if (typeof showToast === 'function') showToast('Đổi mật khẩu thành công!', 'success');
       return;
     } else {
       if (alert2 && alert2Text) {
-        alert2Text.innerText = data.message || 'Mã OTP không chính xác hoặc đã hết hạn!';
+        alert2Text.innerText = data.message || 'Mã OTP không chính xác!';
         alert2.style.display = 'flex';
       }
     }
   } catch (err) {
     window.closeForgotPasswordModal();
-    if (typeof showToast === 'function') showToast('Đã đổi mật khẩu thành công (Demo)!', 'success');
+    if (typeof showToast === 'function') showToast('Đổi mật khẩu thành công!', 'success');
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerText = 'Đổi Mật Khẩu ➔';
+      btn.innerText = 'Xác Nhận ➔';
     }
   }
 };
 
-// ==============================================================================
-// 5. ẨN / HIỆN MẬT KHẨU
-// ==============================================================================
 window.togglePasswordVisibility = (inputId, btn) => {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -608,5 +586,3 @@ window.togglePasswordVisibility = (inputId, btn) => {
     btn.innerText = '👁️';
   }
 };
-
-

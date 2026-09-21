@@ -1,10 +1,5 @@
 <?php
-/**
- * API xử lý:
- * 1. Lấy danh sách điểm đến du lịch (kèm tìm kiếm, lọc thể loại, ngân sách, sắp xếp).
- * 2. Lấy chi tiết điểm đến theo ID (kèm hoạt động, thời tiết, mẹo, đánh giá).
- * 3. Lấy danh sách thể loại phân loại (Categories).
- */
+// API tra cứu, tìm kiếm, lọc địa điểm và quản lý điểm đến cho Admin
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -17,7 +12,6 @@ $db = $database->getConnection();
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $destId = isset($_GET['id']) ? $_GET['id'] : null;
 
-// --- CÁC ACTION DÀNH RIÊNG CHO ADMIN (Thêm / Sửa / Xóa điểm đến) ---
 if ($action === 'create') {
     requireAdmin();
     $data = json_decode(file_get_contents("php://input"), true) ?: $_POST;
@@ -33,7 +27,7 @@ if ($action === 'create') {
 
     if (empty($newId) || empty($name) || empty($city) || !$categoryId || empty($image) || empty($description)) {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Vui lòng điền đầy đủ các trường bắt buộc!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Vui lòng nhập đủ thông tin bắt buộc!"], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
@@ -41,7 +35,7 @@ if ($action === 'create') {
     $checkStmt->execute([':id' => $newId]);
     if ($checkStmt->rowCount() > 0) {
         http_response_code(409);
-        echo json_encode(["status" => "error", "message" => "Mã ID điểm đến này đã tồn tại, vui lòng chọn mã khác!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Mã địa điểm đã tồn tại!"], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
@@ -54,7 +48,7 @@ if ($action === 'create') {
         ':badge' => $badge, ':image' => $image, ':avg_cost' => $avgCost, ':description' => $description
     ]);
 
-    echo json_encode(["status" => "success", "message" => "Đã thêm điểm đến mới!"], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["status" => "success", "message" => "Thêm địa điểm thành công!"], JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -65,7 +59,7 @@ if ($action === 'update') {
     $editId = isset($data['id']) ? trim($data['id']) : '';
     if (empty($editId)) {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Thiếu ID điểm đến cần sửa!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Chưa chọn địa điểm cần sửa!"], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
@@ -86,7 +80,7 @@ if ($action === 'update') {
         ':id' => $editId
     ]);
 
-    echo json_encode(["status" => "success", "message" => "Đã cập nhật điểm đến!"], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["status" => "success", "message" => "Cập nhật điểm đến thành công!"], JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -97,7 +91,7 @@ if ($action === 'delete') {
 
     if (empty($delId)) {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Thiếu ID điểm đến cần xóa!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Chưa chọn địa điểm cần xóa!"], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
@@ -109,7 +103,6 @@ if ($action === 'delete') {
 }
 
 if ($action === 'categories') {
-    // 1. Lấy danh mục
     $stmt = $db->prepare("SELECT * FROM categories ORDER BY id ASC");
     $stmt->execute();
     $categories = $stmt->fetchAll();
@@ -118,7 +111,6 @@ if ($action === 'categories') {
 }
 
 if ($destId) {
-    // 2. Lấy chi tiết 1 điểm đến
     $stmt = $db->prepare("
         SELECT d.*, c.name AS category_name, c.code AS category_code 
         FROM destinations d
@@ -130,16 +122,14 @@ if ($destId) {
 
     if (!$destination) {
         http_response_code(404);
-        echo json_encode(["status" => "error", "message" => "Không tìm thấy điểm đến này!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Địa điểm không tồn tại!"], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
-    // Lấy hoạt động mẫu
     $actStmt = $db->prepare("SELECT time_slot, title, cost FROM destination_activities WHERE destination_id = :id");
     $actStmt->execute([':id' => $destId]);
     $destination['activities'] = $actStmt->fetchAll();
 
-    // Lấy đánh giá reviews
     $revStmt = $db->prepare("SELECT user_name, rating, comment, date_posted FROM reviews WHERE destination_id = :id ORDER BY id DESC");
     $revStmt->execute([':id' => $destId]);
     $destination['reviews'] = $revStmt->fetchAll();
@@ -148,7 +138,6 @@ if ($destId) {
     exit();
 }
 
-// 3. Lấy danh sách điểm đến với bộ lọc
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $budget = isset($_GET['budget']) && is_numeric($_GET['budget']) ? (int)$_GET['budget'] : null;

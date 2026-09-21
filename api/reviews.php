@@ -1,9 +1,5 @@
 <?php
-/**
- * API Quản Lý Đánh Giá Reviews:
- * 1. Lấy danh sách đánh giá theo ID điểm đến.
- * 2. Thêm đánh giá mới kèm chấm điểm sao.
- */
+// API quản lý bình luận và đánh giá điểm đến
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -21,7 +17,7 @@ switch ($action) {
     case 'list':
         if (empty($destId)) {
             http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Thiếu ID điểm đến!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Thiếu ID địa điểm!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
@@ -35,13 +31,13 @@ switch ($action) {
         $destId = isset($data['destination_id']) ? $data['destination_id'] : '';
         $userName = isset($data['user_name']) ? trim($data['user_name']) : 'Khách du lịch';
         $rating = isset($data['rating']) ? (int)$data['rating'] : 5;
-        $rating = max(1, min(5, $rating)); // Ép rating luôn nằm trong khoảng 1-5 sao
+        $rating = max(1, min(5, $rating));
         $comment = isset($data['comment']) ? trim($data['comment']) : '';
         $datePosted = date('d/m/Y');
 
         if (empty($destId) || empty($comment)) {
             http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Vui lòng nhập nội dung đánh giá!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Nội dung đánh giá không được để trống!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
@@ -57,11 +53,11 @@ switch ($action) {
             ':date_posted' => $datePosted
         ]);
 
-        echo json_encode(["status" => "success", "message" => "Cảm ơn bạn đã gửi đánh giá!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "success", "message" => "Đã gửi đánh giá!"], JSON_UNESCAPED_UNICODE);
         break;
 
     case 'delete':
-        requireAdmin(); // Chỉ Admin được xóa review của bất kỳ ai
+        requireAdmin();
         $reviewId = isset($data['id']) ? (int)$data['id'] : 0;
         if (!$reviewId) {
             http_response_code(400);
@@ -75,6 +71,6 @@ switch ($action) {
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Hành động không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Yêu cầu không hợp lệ!"], JSON_UNESCAPED_UNICODE);
         break;
 }

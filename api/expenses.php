@@ -1,10 +1,5 @@
 <?php
-/**
- * API Sổ Chi Tiêu Thực Tế (Expense Tracker):
- * 1. Lấy danh sách các khoản chi tiêu.
- * 2. Thêm khoản chi tiêu mới.
- * 3. Xóa khoản chi tiêu.
- */
+// API quản lý Sổ chi tiêu thực tế (Expense Tracker)
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -19,7 +14,7 @@ $data = json_decode(file_get_contents("php://input"), true) ?: $_POST;
 
 if (!$userId) {
     http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "Bạn cần đăng nhập để dùng sổ chi tiêu!"], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập!"], JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -40,7 +35,7 @@ switch ($action) {
 
         if (empty($title) || $amount <= 0) {
             http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Vui lòng nhập tên khoản chi và số tiền hợp lệ!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Tên khoản chi hoặc số tiền không hợp lệ!"], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
@@ -57,7 +52,7 @@ switch ($action) {
             ':expense_date' => $expenseDate
         ]);
 
-        echo json_encode(["status" => "success", "message" => "Đã ghi nhận khoản chi tiêu!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "success", "message" => "Lưu khoản chi thành công!"], JSON_UNESCAPED_UNICODE);
         break;
 
     case 'delete':
@@ -71,6 +66,6 @@ switch ($action) {
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Hành động không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Yêu cầu không hợp lệ!"], JSON_UNESCAPED_UNICODE);
         break;
 }

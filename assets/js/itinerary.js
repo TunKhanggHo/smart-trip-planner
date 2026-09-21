@@ -1,6 +1,4 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
-  // Trang PRIVATE: bắt buộc đăng nhập mới được xem "Lịch trình của tôi"
   const allowed = await requireLogin();
   if (!allowed) return;
 
@@ -41,7 +39,6 @@ async function getSavedTrips() {
     }
   } catch (e) {}
 
-  // Chưa đăng nhập -> Trả về mảng rỗng ngay, không lấy dữ liệu cũ
   if (!user) return [];
 
   try {
@@ -116,7 +113,7 @@ async function renderTrips() {
 }
 
 window.deleteTrip = async (tripId) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa chuyến đi này?')) return;
+  if (!confirm('Xóa chuyến đi này?')) return;
   try {
     await fetch('api/trips.php?action=delete', {
       method: 'POST',
@@ -132,7 +129,7 @@ window.deleteTrip = async (tripId) => {
   localStorage.setItem(key, JSON.stringify(trips));
   
   await renderTrips();
-  showToast('Đã xóa chuyến đi thành công!', 'info');
+  showToast('Đã xóa chuyến đi!', 'info');
 };
 
 window.duplicateTrip = async (tripId) => {
@@ -161,7 +158,7 @@ window.duplicateTrip = async (tripId) => {
     localStorage.setItem(key, JSON.stringify(localTrips));
 
     await renderTrips();
-    showToast('Đã nhân bản lịch trình thành công!', 'success');
+    showToast('Đã nhân bản lịch trình!', 'success');
   }
 };
 
@@ -192,7 +189,7 @@ window.editTripName = async (tripId) => {
   }
 };
 
-/* --- 3. QUẢN LÝ CHI TIÊU THỰC TẾ (EXPENSE TRACKER API) --- */
+/* --- 3. QUẢN LÝ CHI TIÊU THỰC TẾ --- */
 function getExpenseStorageKey() {
   const currentUser = typeof Auth !== 'undefined' ? Auth.getUser() : null;
   return currentUser ? `smart_trip_expenses_${currentUser.email || currentUser.id}` : null;
@@ -206,10 +203,9 @@ async function renderExpenses() {
   const currentUser = typeof Auth !== 'undefined' ? Auth.getUser() : null;
   let expenses = [];
 
-  // CHƯA ĐĂNG NHẬP: Trả về bảng trống hoàn toàn
   if (!currentUser) {
     if (totalDisplay) totalDisplay.innerText = formatVND(0);
-    tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Vui lòng đăng nhập để xem sổ chi tiêu của bạn.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Vui lòng đăng nhập để xem chi tiêu.</td></tr>`;
     return;
   }
 
@@ -230,36 +226,39 @@ async function renderExpenses() {
   if (totalDisplay) totalDisplay.innerText = formatVND(total);
 
   if (expenses.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có khoản chi tiêu nào được ghi nhận.</td></tr>`;
-    return;
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có khoản chi tiêu nào.</td></tr>`;
+  } else {
+    tableBody.innerHTML = expenses.map((exp, idx) => `
+      <tr>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light);">${idx + 1}</td>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); font-weight: 600;">${escapeHtml(exp.title)}</td>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light);"><span class="badge badge-primary">${escapeHtml(exp.category)}</span></td>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem;">${escapeHtml(exp.expense_date || exp.date)}</td>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); font-weight: 700; color: var(--accent);">${formatVND(exp.amount)}</td>
+        <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); text-align: center;">
+          <button onclick="deleteExpenseItem('${exp.id}')" class="btn btn-outline btn-sm" style="color: var(--danger); padding: 0.2rem 0.5rem;">✕</button>
+        </td>
+      </tr>
+    `).join('');
   }
 
-  tableBody.innerHTML = expenses.map((exp, idx) => `
-    <tr>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light);">${idx + 1}</td>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); font-weight: 600;">${escapeHtml(exp.title)}</td>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light);"><span class="badge badge-primary">${escapeHtml(exp.category)}</span></td>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem;">${escapeHtml(exp.expense_date || exp.date)}</td>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); font-weight: 700; color: var(--accent);">${formatVND(exp.amount)}</td>
-      <td style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); text-align: center;">
-        <button onclick="deleteExpenseItem('${exp.id}')" class="btn btn-outline btn-sm" style="color: var(--danger); padding: 0.2rem 0.5rem;">✕</button>
-      </td>
-    </tr>
-  `).join('');
-
-  // Form thêm khoản chi
-  const form = document.getElementById('addExpenseForm');
+  const form = document.getElementById('addExpenseForm') || document.querySelector('form');
   if (form) {
     form.onsubmit = async (e) => {
       e.preventDefault();
+
       if (!currentUser) {
-        showToast('Vui lòng đăng nhập để thêm khoản chi tiêu!', 'error');
+        showToast('Vui lòng đăng nhập!', 'error');
         return;
       }
 
-      const title = document.getElementById('expTitle').value.trim();
-      const amount = parseInt(document.getElementById('expAmount').value) || 0;
-      const category = document.getElementById('expCategory').value;
+      const titleInput = document.getElementById('expTitle') || form.querySelector('input[type="text"]');
+      const amountInput = document.getElementById('expAmount') || form.querySelector('input[type="number"]');
+      const catInput = document.getElementById('expCategory') || form.querySelector('select');
+
+      const title = titleInput ? titleInput.value.trim() : '';
+      const amount = amountInput ? parseInt(amountInput.value) || 0 : 0;
+      const category = catInput ? catInput.value : 'Ăn uống';
 
       if (!title || amount <= 0) return;
 
@@ -288,7 +287,7 @@ async function renderExpenses() {
 
       form.reset();
       await renderExpenses();
-      showToast('Đã ghi nhận khoản chi tiêu vào MySQL!', 'success');
+      showToast('Đã thêm khoản chi tiêu!', 'success');
     };
   }
 }
@@ -313,7 +312,7 @@ window.deleteExpenseItem = async (expId) => {
   showToast('Đã xóa khoản chi tiêu!', 'info');
 };
 
-/* --- 4. QUẢN LÝ CHECKLIST HÀNH LÝ API --- */
+/* --- 4. QUẢN LÝ CHECKLIST HÀNH LÝ --- */
 async function renderChecklist() {
   const container = document.getElementById('checklistContainer');
   const progressText = document.getElementById('checklistProgressText');
@@ -323,11 +322,10 @@ async function renderChecklist() {
   const currentUser = typeof Auth !== 'undefined' ? Auth.getUser() : null;
   let items = [];
 
-  // CHƯA ĐĂNG NHẬP: Trả về giao diện trống hoàn toàn
   if (!currentUser) {
     if (progressText) progressText.innerText = `Đã chuẩn bị 0/0 món (0%)`;
     if (progressBar) progressBar.style.width = `0%`;
-    container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Vui lòng đăng nhập để xem danh sách hành lý của bạn.</div>`;
+    container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Vui lòng đăng nhập để xem hành lý.</div>`;
     return;
   }
 
@@ -351,7 +349,7 @@ async function renderChecklist() {
   if (progressBar) progressBar.style.width = `${percent}%`;
 
   if (items.length === 0) {
-    container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có vật dụng nào trong danh sách hành lý.</div>`;
+    container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có vật dụng trong danh sách.</div>`;
     return;
   }
 
@@ -375,17 +373,20 @@ async function renderChecklist() {
     `;
   }).join('');
 
-  const form = document.getElementById('addChecklistForm');
+  const form = document.getElementById('addChecklistForm') || document.querySelectorAll('form')[1];
   if (form) {
     form.onsubmit = async (e) => {
       e.preventDefault();
       if (!currentUser) {
-        showToast('Vui lòng đăng nhập để thêm vật dụng!', 'error');
+        showToast('Vui lòng đăng nhập!', 'error');
         return;
       }
 
-      const name = document.getElementById('chkItemName').value.trim();
-      const cat = document.getElementById('chkItemCategory').value;
+      const nameInput = document.getElementById('chkItemName') || form.querySelector('input[type="text"]');
+      const catInput = document.getElementById('chkItemCategory') || form.querySelector('select');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const cat = catInput ? catInput.value : 'Khác';
 
       if (!name) return;
 
@@ -411,7 +412,7 @@ async function renderChecklist() {
 
       form.reset();
       await renderChecklist();
-      showToast('Đã thêm món đồ vào CSDL!', 'success');
+      showToast('Đã thêm món đồ!', 'success');
     };
   }
 }

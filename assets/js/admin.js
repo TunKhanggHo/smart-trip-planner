@@ -1,11 +1,9 @@
-
-let currentAdminId = null; // ID của chính admin đang đăng nhập (để tự chặn tự khóa mình)
+let currentAdminId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const allowed = await requireAdminPage();
   if (!allowed) return;
 
-  // Lấy ID admin hiện tại để so sánh khi hiển thị nút Khóa/Mở user
   try {
     const res = await fetch('api/auth.php?action=me');
     if (res.ok) {
@@ -23,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initDestinationForm();
 });
 
-/* --- 1. TAB NAVIGATION --- */
 function initAdminTabs() {
   const tabBtns = document.querySelectorAll('.admin-tab-btn');
   const tabPanes = document.querySelectorAll('.admin-tab-pane');
@@ -39,7 +36,6 @@ function initAdminTabs() {
   });
 }
 
-/* --- 2. TAB THỐNG KÊ --- */
 async function loadStats() {
   try {
     const res = await fetch('api/admin_stats.php');
@@ -63,11 +59,10 @@ async function loadStats() {
       </tr>
     `).join('');
   } catch (e) {
-    showToast('Không thể tải dữ liệu thống kê!', 'error');
+    showToast('Tải dữ liệu thống kê thất bại!', 'error');
   }
 }
 
-/* --- 3. TAB QUẢN LÝ ĐIỂM ĐẾN --- */
 let categoriesCache = [];
 
 async function loadCategoriesIntoForm() {
@@ -90,7 +85,7 @@ async function loadDestinations() {
     const json = await res.json();
     if (json.status !== 'success') return;
 
-    window._allDestinationsCache = json.data; // dùng lại cho edit modal & dropdown review
+    window._allDestinationsCache = json.data;
 
     tbody.innerHTML = json.data.map(d => `
       <tr>
@@ -106,7 +101,7 @@ async function loadDestinations() {
       </tr>
     `).join('');
   } catch (e) {
-    showToast('Không thể tải danh sách điểm đến!', 'error');
+    showToast('Tải danh sách điểm đến thất bại!', 'error');
   }
 }
 
@@ -125,7 +120,7 @@ window.openDestinationModal = (destId = null) => {
     title.innerText = 'Sửa Điểm Đến';
     modeInput.value = 'update';
     idInput.value = dest.id;
-    idInput.disabled = true; // Không cho đổi ID khi sửa
+    idInput.disabled = true;
     document.getElementById('destFormName').value = dest.name;
     document.getElementById('destFormCity').value = dest.city;
     document.getElementById('destFormCategory').value = dest.category_id;
@@ -181,13 +176,13 @@ function initDestinationForm() {
         showToast(data.message || 'Có lỗi xảy ra!', 'error');
       }
     } catch (err) {
-      showToast('Không thể kết nối đến máy chủ!', 'error');
+      showToast('Không thể kết nối máy chủ!', 'error');
     }
   });
 }
 
 window.deleteDestination = async (destId, destName) => {
-  if (!confirm(`Xóa vĩnh viễn điểm đến "${destName}"? Hành động này không thể hoàn tác!`)) return;
+  if (!confirm(`Xóa điểm đến "${destName}"? Hành động này không thể hoàn tác!`)) return;
 
   try {
     const res = await fetch('api/destinations.php?action=delete', {
@@ -204,11 +199,10 @@ window.deleteDestination = async (destId, destName) => {
       showToast(data.message || 'Không thể xóa!', 'error');
     }
   } catch (e) {
-    showToast('Không thể kết nối đến máy chủ!', 'error');
+    showToast('Không thể kết nối máy chủ!', 'error');
   }
 };
 
-/* --- 4. TAB QUẢN LÝ NGƯỜI DÙNG --- */
 async function loadUsers() {
   const tbody = document.getElementById('usersTableBody');
   try {
@@ -260,11 +254,10 @@ window.toggleBanUser = async (userId, action) => {
       showToast(data.message || 'Có lỗi xảy ra!', 'error');
     }
   } catch (e) {
-    showToast('Không thể kết nối đến máy chủ!', 'error');
+    showToast('Không thể kết nối máy chủ!', 'error');
   }
 };
 
-/* --- 5. TAB QUẢN LÝ ĐÁNH GIÁ --- */
 async function loadReviewDestinationSelect() {
   const select = document.getElementById('reviewDestSelect');
   const list = window._allDestinationsCache || [];
@@ -280,7 +273,7 @@ async function loadReviewDestinationSelect() {
 async function loadReviewsForDestination(destId) {
   const tbody = document.getElementById('reviewsTableBody');
   if (!destId) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chọn 1 điểm đến ở trên để xem đánh giá.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chọn điểm đến để xem đánh giá.</td></tr>`;
     return;
   }
 
@@ -290,7 +283,7 @@ async function loadReviewsForDestination(destId) {
     if (json.status !== 'success') return;
 
     if (json.data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Điểm đến này chưa có đánh giá nào.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Địa điểm này chưa có đánh giá.</td></tr>`;
       return;
     }
 
@@ -306,12 +299,12 @@ async function loadReviewsForDestination(destId) {
       </tr>
     `).join('');
   } catch (e) {
-    showToast('Không thể tải danh sách đánh giá!', 'error');
+    showToast('Tải danh sách đánh giá thất bại!', 'error');
   }
 }
 
 window.deleteReview = async (reviewId, destId) => {
-  if (!confirm('Xóa vĩnh viễn đánh giá này?')) return;
+  if (!confirm('Xóa đánh giá này?')) return;
 
   try {
     const res = await fetch('api/reviews.php?action=delete', {
@@ -328,6 +321,6 @@ window.deleteReview = async (reviewId, destId) => {
       showToast(data.message || 'Không thể xóa!', 'error');
     }
   } catch (e) {
-    showToast('Không thể kết nối đến máy chủ!', 'error');
+    showToast('Không thể kết nối máy chủ!', 'error');
   }
 };

@@ -1,17 +1,9 @@
-/**
- * Kết nối PHP API & MySQL:
- * - Tải thông tin tài khoản người dùng và thống kê số chuyến đi, số yêu thích.
- * - Cập nhật thông tin cá nhân vào bảng `users`.
- * - Hiển thị danh sách các địa điểm đã thả tim từ bảng `favorites`.
- */
-
 document.addEventListener('DOMContentLoaded', async () => {
   await loadUserProfile();
   await loadFavoritesList();
   initProfileForm();
 });
 
-// 1. Tải thông tin cá nhân & Thống kê
 async function loadUserProfile() {
   let user = null;
   try {
@@ -31,7 +23,7 @@ async function loadUserProfile() {
   }
 
   if (!user) {
-    showToast('Vui lòng đăng nhập để xem hồ sơ cá nhân!', 'error');
+    showToast('Vui lòng đăng nhập trước!', 'error');
     setTimeout(() => { window.location.href = 'login.html'; }, 1000);
     return;
   }
@@ -50,7 +42,6 @@ async function loadUserProfile() {
   if (editPhone) editPhone.value = user.phone || '';
   if (editBio) editBio.value = user.bio || '';
 
-  // Đếm số chuyến đi đã lập
   let tripsCount = 0;
   try {
     const tripRes = await fetch('api/trips.php?action=list');
@@ -66,7 +57,6 @@ async function loadUserProfile() {
   document.getElementById('statTripsCount').innerText = tripsCount;
 }
 
-// 2. Tải danh sách Địa điểm Yêu thích
 async function loadFavoritesList() {
   const grid = document.getElementById('favoritesGrid');
   const empty = document.getElementById('noFavoritesSaved');
@@ -116,7 +106,6 @@ window.removeFavFromProfile = async (destId) => {
   showToast('Đã bỏ yêu thích địa điểm!', 'info');
 };
 
-// 3. Xử lý Cập nhật thông tin cá nhân
 function initProfileForm() {
   const form = document.getElementById('profileForm');
   if (!form) return;
@@ -140,7 +129,6 @@ function initProfileForm() {
       }
     } catch (e) {}
 
-    // Cập nhật LocalStorage
     let user = JSON.parse(localStorage.getItem('trip_planner_user')) || {};
     user.name = name;
     user.phone = phone;
@@ -151,9 +139,9 @@ function initProfileForm() {
     await loadUserProfile();
 
     if (backendOk) {
-      showToast('Cập nhật hồ sơ vào MySQL thành công!', 'success');
+      showToast('Cập nhật thông tin thành công!', 'success');
     } else {
-      showToast('Không thể cập nhật hồ sơ lên máy chủ. Vui lòng đăng nhập lại!', 'error');
+      showToast('Lỗi cập nhật. Vui lòng đăng nhập lại!', 'error');
     }
   });
 }

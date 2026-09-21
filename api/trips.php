@@ -1,10 +1,5 @@
 <?php
-/**
- * API xử lý:
- * 1. Lưu chuyến đi mới do Smart Planner sinh ra (lưu vào bảng trips & trip_schedules).
- * 2. Lấy danh sách chuyến đi của người dùng.
- * 3. Chỉnh sửa tên, nhân bản và xóa chuyến đi.
- */
+// API lưu chuyến đi, tạo lịch trình chi tiết và quản lý chuyến đi cá nhân
 
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
@@ -18,34 +13,29 @@ $userId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
 
 $data = json_decode(file_get_contents("php://input"), true) ?: $_POST;
 
-// Các hành động ghi/sửa/xóa dữ liệu bắt buộc phải đăng nhập
 $actionsRequireLogin = ['create', 'delete', 'update_name'];
 if (in_array($action, $actionsRequireLogin) && !$userId) {
     http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "Bạn cần đăng nhập để thực hiện thao tác này!"], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập trước!"], JSON_UNESCAPED_UNICODE);
     exit();
 }
 
 switch ($action) {
     case 'list':
-        // CHƯA ĐĂNG NHẬP: Trả về mảng rỗng ngay, không hiện chuyến đi của tài khoản khác
         if (!$userId) {
             echo json_encode(["status" => "success", "data" => []], JSON_UNESCAPED_UNICODE);
             exit();
         }
 
-        // ĐÃ ĐĂNG NHẬP: Chỉ lấy đúng chuyến đi của user_id hiện tại
         $stmt = $db->prepare("SELECT * FROM trips WHERE user_id = :user_id ORDER BY created_at DESC");
         $stmt->execute([':user_id' => $userId]);
         $trips = $stmt->fetchAll();
 
-        // Lấy schedules cho từng trip
         foreach ($trips as &$trip) {
             $schStmt = $db->prepare("SELECT day_number, time_slot, title, cost FROM trip_schedules WHERE trip_id = :trip_id ORDER BY day_number ASC, id ASC");
             $schStmt->execute([':trip_id' => $trip['id']]);
             $rawSchedules = $schStmt->fetchAll();
 
-            // Nhóm theo day_number
             $days = [];
             foreach ($rawSchedules as $item) {
                 $dayNum = $item['day_number'];
@@ -87,7 +77,6 @@ switch ($action) {
         $totalCost = isset($data['totalCostPerPerson']) ? (int)$data['totalCostPerPerson'] : 0;
         $schedule = isset($data['schedule']) ? $data['schedule'] : [];
 
-        // Insert vào bảng trips
         $stmt = $db->prepare("
             INSERT INTO trips (id, user_id, destination_id, destination_name, city, image, start_date, days, people, vehicle, style, user_budget, total_cost_per_person)
             VALUES (:id, :user_id, :dest_id, :dest_name, :city, :image, :start_date, :days, :people, :vehicle, :style, :user_budget, :total_cost)
@@ -108,7 +97,6 @@ switch ($action) {
             ':total_cost' => $totalCost
         ]);
 
-        // Insert vào bảng trip_schedules
         if (!empty($schedule)) {
             $schStmt = $db->prepare("
                 INSERT INTO trip_schedules (trip_id, day_number, time_slot, title, cost)
@@ -139,14 +127,13 @@ switch ($action) {
             break;
         }
 
-        // Kiểm tra chuyến đi này có đúng là của người đang đăng nhập không
         $ownerStmt = $db->prepare("SELECT user_id FROM trips WHERE id = :id");
         $ownerStmt->execute([':id' => $tripId]);
         $tripOwner = $ownerStmt->fetch();
 
         if (!$tripOwner) {
             http_response_code(404);
-            echo json_encode(["status" => "error", "message" => "Không tìm thấy chuyến đi!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Chuyến đi không tồn tại!"], JSON_UNESCAPED_UNICODE);
             break;
         }
         if ((int)$tripOwner['user_id'] !== $userId) {
@@ -157,7 +144,7 @@ switch ($action) {
 
         $stmt = $db->prepare("DELETE FROM trips WHERE id = :id AND user_id = :user_id");
         $stmt->execute([':id' => $tripId, ':user_id' => $userId]);
-        echo json_encode(["status" => "success", "message" => "Đã xóa chuyến đi!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "success", "message" => "Đã xóa chuyến đi thành công!"], JSON_UNESCAPED_UNICODE);
         break;
 
     case 'update_name':
@@ -165,33 +152,33 @@ switch ($action) {
         $newName = isset($data['name']) ? trim($data['name']) : '';
         if (!$tripId || !$newName) {
             http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Thiếu thông tin cần thiết!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Thiếu thông tin!"], JSON_UNESCAPED_UNICODE);
             break;
         }
 
-        // Kiểm tra chuyến đi này có đúng là của người đang đăng nhập không
         $ownerStmt = $db->prepare("SELECT user_id FROM trips WHERE id = :id");
         $ownerStmt->execute([':id' => $tripId]);
         $tripOwner = $ownerStmt->fetch();
 
         if (!$tripOwner) {
             http_response_code(404);
-            echo json_encode(["status" => "error", "message" => "Không tìm thấy chuyến đi!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Chuyến đi không tồn tại!"], JSON_UNESCAPED_UNICODE);
             break;
         }
         if ((int)$tripOwner['user_id'] !== $userId) {
             http_response_code(403);
-            echo json_encode(["status" => "error", "message" => "Bạn không có quyền sửa chuyến đi này!"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["status" => "error", "message" => "Bạn không có quyền đổi tên chuyến đi này!"], JSON_UNESCAPED_UNICODE);
             break;
+
         }
 
         $stmt = $db->prepare("UPDATE trips SET destination_name = :name WHERE id = :id AND user_id = :user_id");
         $stmt->execute([':name' => $newName, ':id' => $tripId, ':user_id' => $userId]);
-        echo json_encode(["status" => "success", "message" => "Đã đổi tên chuyến đi!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "success", "message" => "Đã đổi tên chuyến đi thành công!"], JSON_UNESCAPED_UNICODE);
         break;
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Hành động không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["status" => "error", "message" => "Yêu cầu không hợp lệ!"], JSON_UNESCAPED_UNICODE);
         break;
 }
