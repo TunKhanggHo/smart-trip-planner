@@ -24,6 +24,7 @@
 
 ## 🗂️ 2. CẤU TRÚC THƯ MỤC DỰ ÁN
 
+```text
 smart-trip-planner/
 ├── api/                             # Backend PHP - xử lý logic & truy vấn MySQL (PDO)
 │   ├── auth.php                     # Đăng nhập / Đăng ký (OTP email) / Quên mật khẩu / Session / Cập nhật hồ sơ
